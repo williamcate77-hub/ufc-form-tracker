@@ -3,6 +3,7 @@ export interface RecentFight {
   result: "W" | "L" | "D" | "NC";
   method: string;
   year: number;
+  weightClass?: string;
 }
 
 export interface Fighter {

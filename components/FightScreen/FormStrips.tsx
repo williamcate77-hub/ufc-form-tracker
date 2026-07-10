@@ -4,6 +4,7 @@ import { Fighter } from "@/lib/types";
 
 interface FormStripsProps {
   fighters: [Fighter, Fighter];
+  currentWeightClass?: string;
 }
 
 function getResultColor(result: string): string {
@@ -20,14 +21,14 @@ function getResultColor(result: string): string {
   }
 }
 
-export function FormStrips({ fighters }: FormStripsProps) {
+export function FormStrips({ fighters, currentWeightClass }: FormStripsProps) {
   return (
     <div className="px-4 py-4 space-y-3">
       {fighters.map((fighter, idx) => (
         <div key={idx} className="flex items-start gap-4">
           {/* Fighter info */}
           <div className="flex-1 min-w-0">
-            <div className="flex items-baseline gap-2 mb-2">
+            <div className="flex items-baseline gap-2 mb-1">
               <h3 className="font-bold text-slate-50">
                 {fighter.name}
                 {fighter.rank && (
@@ -36,6 +37,18 @@ export function FormStrips({ fighters }: FormStripsProps) {
               </h3>
               <span className="text-xs text-slate-400">{fighter.age}yo</span>
             </div>
+
+            {/* Weight class: current (previous) */}
+            {currentWeightClass && (
+              <div className="text-xs text-slate-300 mb-2">
+                <span className="font-semibold">{currentWeightClass}</span>
+                {fighter.recentFights.length > 0 && fighter.recentFights[0].weightClass && (
+                  <span className="text-slate-500">
+                    {" "}(prev: {fighter.recentFights[0].weightClass})
+                  </span>
+                )}
+              </div>
+            )}
 
             {/* Compact record line */}
             <div className="text-xs text-slate-400 mb-2 flex gap-3">

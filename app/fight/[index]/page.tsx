@@ -90,7 +90,7 @@ export default function FightScreen() {
           <PickSummary editorial={fight.editorial} />
 
           <div className="border-b border-slate-700">
-            <FormStrips fighters={fight.fighters} />
+            <FormStrips fighters={fight.fighters} currentWeightClass={fight.division} />
           </div>
 
           <StoryContent editorial={fight.editorial} />
