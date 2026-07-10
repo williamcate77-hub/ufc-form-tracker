@@ -89,11 +89,8 @@ export default function FightScreen() {
 
           <PickSummary editorial={fight.editorial} />
 
-          <div className="px-4 py-3 border-b border-slate-700">
-            <h3 className="text-sm font-bold text-slate-50 mb-3">
-              Recent Form
-            </h3>
-            <FormStrips fighters={fight.fighters} isFirst={true} />
+          <div className="border-b border-slate-700">
+            <FormStrips fighters={fight.fighters} />
           </div>
 
           <StoryContent editorial={fight.editorial} />
