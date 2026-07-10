@@ -27,8 +27,15 @@ export function useCacheState(): UseCacheStateReturn {
         const status = (await response.json()) as CacheStatus;
         setCacheStatus(status);
 
-        // In a real app, we'd also load the cached event from localStorage or a separate API
-        // For now, we'll treat it as pending until refresh
+        // Try to load cached event from localStorage
+        try {
+          const cached = localStorage.getItem("ufc_cached_event");
+          if (cached) {
+            setEvent(JSON.parse(cached) as CachedEvent);
+          }
+        } catch {
+          // localStorage not available
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to check cache");
       } finally {
@@ -60,7 +67,18 @@ export function useCacheState(): UseCacheStateReturn {
         throw new Error(result.error || "Refresh failed");
       }
 
-      // In a real app, fetch the updated event from cache/API
+      // Get the updated event from a separate endpoint
+      try {
+        const eventResponse = await fetch("/api/current-event");
+        if (eventResponse.ok) {
+          const updatedEvent = (await eventResponse.json()) as CachedEvent;
+          setEvent(updatedEvent);
+          localStorage.setItem("ufc_cached_event", JSON.stringify(updatedEvent));
+        }
+      } catch {
+        // If we can't fetch the full event, just update the status
+      }
+
       setCacheStatus({
         eventId: result.eventId,
         oddsAge: 0,

@@ -1,5 +1,6 @@
 import { ANTHROPIC_API_KEY, GENERATION_TIMEOUT } from "./constants";
 import { Fight, CachedEvent } from "./types";
+import { mockFightCard } from "./mock-data";
 
 const ANTHROPIC_BASE_URL = "https://api.anthropic.com/v1";
 
@@ -62,8 +63,23 @@ export async function generateFightCard(): Promise<{
   venue: string;
   broadcast: string;
   cardSummary: string;
-  nextEvent: { name: string; date: string };
+  nextEvent?: { name: string; date: string };
 }> {
+  // Use mock data if no API key
+  if (!ANTHROPIC_API_KEY || ANTHROPIC_API_KEY.includes("test") || ANTHROPIC_API_KEY.includes("your_key")) {
+    console.log("Using mock fight card data (no API key configured)");
+    return {
+      fights: mockFightCard.fights,
+      eventName: mockFightCard.eventName,
+      eventDate: mockFightCard.eventDate,
+      eventDateAEST: mockFightCard.eventDateAEST,
+      venue: mockFightCard.venue,
+      broadcast: mockFightCard.broadcast,
+      cardSummary: mockFightCard.cardSummary,
+      nextEvent: mockFightCard.nextEvent,
+    };
+  }
+
   const prompt = `You are a UFC analyst. Search the web for the next upcoming UFC event (either a numbered event like UFC 300 or a Fight Night card). Find and return ONLY a valid JSON object (no markdown fences, no explanations) with this exact structure:
 
 {

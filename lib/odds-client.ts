@@ -37,6 +37,20 @@ export async function fetchOddsForFighters(
   fighter1: string,
   fighter2: string
 ): Promise<BoutOdds | null> {
+  // Use mock odds if no API key
+  if (!ODDS_API_KEY || ODDS_API_KEY.includes("test") || ODDS_API_KEY.includes("your_key")) {
+    console.log(`Using mock odds for ${fighter1} vs ${fighter2}`);
+    return {
+      fighters: [
+        { decimal: Math.random() * 1.5 + 1.5, bookmaker: "Sportsbet" },
+        { decimal: Math.random() * 1.5 + 1.5, bookmaker: "TAB" },
+      ],
+      updatedAt: Date.now(),
+      favouriteIndex: Math.random() > 0.5 ? 0 : 1,
+      impliedProbability: [Math.random(), Math.random()],
+    };
+  }
+
   try {
     const url = new URL(`${ODDS_API_BASE}/sports/${MMA_SPORT_KEY}/events`);
     url.searchParams.append("apiKey", ODDS_API_KEY);

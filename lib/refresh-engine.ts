@@ -55,6 +55,8 @@ export async function decideRefreshMode(
   return "odds"; // Default to refresh odds
 }
 
+let currentEventId = "UFC_300"; // Default for testing
+
 export async function executeRefresh(
   mode: "full" | "odds" | "changes"
 ): Promise<{ event: CachedEvent; changedFights: number[] }> {
@@ -65,6 +67,7 @@ export async function executeRefresh(
     if (mode === "full") {
       // Generate entire new card
       const generated = await generateFightCard();
+      currentEventId = generated.eventName.replace(/\s+/g, "_");
 
       // Fetch odds for all fights
       const fighterPairs = generated.fights.map((fight) => [
@@ -106,7 +109,7 @@ export async function executeRefresh(
 
     if (mode === "odds" || mode === "changes") {
       // Load cached event
-      let cached = await getCachedEvent("");
+      let cached = await getCachedEvent(currentEventId);
       if (!cached) {
         // Fallback to full generation if no cache
         return executeRefresh("full");
