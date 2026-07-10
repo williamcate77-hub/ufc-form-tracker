@@ -22,7 +22,7 @@ export default function Home() {
     return (
       <div className="flex flex-1 items-center justify-center">
         <div className="text-center">
-          <div className="text-slate-400 mb-4">Loading...</div>
+          <div style={{ color: '#a0a0a0' }}>Loading...</div>
         </div>
       </div>
     );
@@ -30,16 +30,20 @@ export default function Home() {
 
   if (error && !cacheStatus) {
     return (
-      <div className="flex flex-1 items-center justify-center px-4">
+      <div className="flex flex-1 items-center justify-center px-6">
         <div className="text-center max-w-sm">
-          <h1 className="text-2xl font-bold text-slate-50 mb-2">
+          <h1 className="text-2xl font-bold mb-3" style={{ color: '#f5f5f5' }}>
             Something went wrong
           </h1>
-          <p className="text-slate-400 mb-4">{error}</p>
+          <p className="mb-6" style={{ color: '#a0a0a0' }}>{error}</p>
           <button
             onClick={() => refresh("full")}
             disabled={isRefreshing}
-            className="px-4 py-2 bg-amber-700 hover:bg-amber-600 disabled:opacity-50 rounded text-amber-50 font-medium transition"
+            className="px-6 py-3 font-bold rounded-xl transition hover:shadow-lg disabled:opacity-50"
+            style={{
+              backgroundColor: '#1d7f1f',
+              color: '#f5f5f5'
+            }}
           >
             {isRefreshing ? "Refreshing..." : "Try again"}
           </button>
@@ -59,18 +63,22 @@ export default function Home() {
           />
         )}
 
-        <div className="flex flex-1 items-center justify-center px-4">
+        <div className="flex flex-1 items-center justify-center px-6">
           <div className="text-center max-w-sm">
-            <h1 className="text-3xl font-bold text-slate-50 mb-4">
-              UFC Form Tracker
+            <h1 className="text-5xl font-black mb-6" style={{ color: '#ffd700' }}>
+              UFC Form
             </h1>
-            <p className="text-slate-400 mb-6">
+            <p className="text-lg mb-8 font-medium" style={{ color: '#c0c0c0' }}>
               Your personal fight-week form guide
             </p>
             <button
               onClick={() => refresh("full")}
               disabled={isRefreshing}
-              className="w-full px-6 py-3 bg-amber-700 hover:bg-amber-600 disabled:opacity-50 rounded text-amber-50 font-bold text-lg transition"
+              className="w-full px-8 py-4 font-bold text-lg rounded-xl transition hover:shadow-lg disabled:opacity-50"
+              style={{
+                backgroundColor: '#1d7f1f',
+                color: '#f5f5f5'
+              }}
             >
               {isRefreshing ? "Building card..." : "Load the card"}
             </button>
@@ -93,7 +101,7 @@ export default function Home() {
   );
 
   return (
-    <div className="flex flex-col flex-1 bg-slate-950">
+    <div className="flex flex-col flex-1 overflow-y-auto">
       {cacheStatus && (
         <CachePromptBanner
           status={cacheStatus}
@@ -102,19 +110,35 @@ export default function Home() {
         />
       )}
 
-      <div className="flex flex-col flex-1 px-4 py-6 max-w-3xl mx-auto w-full overflow-y-auto">
+      <div className="flex flex-col flex-1 px-6 py-8 max-w-4xl mx-auto w-full">
         {/* Event Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-slate-50 mb-2">
-            {event.eventName}
-          </h1>
-          <p className="text-base text-slate-300 mb-1">{event.eventDateAEST}</p>
-          <p className="text-sm text-slate-400 mb-1">{event.venue}</p>
-          <p className="text-sm text-slate-400 mb-4">{event.broadcast}</p>
+        <div className="mb-12">
+          <div className="mb-8">
+            <h1 className="text-6xl font-black mb-4" style={{ color: '#ffd700' }}>
+              {event.eventName}
+            </h1>
+            <div className="space-y-2">
+              <p className="text-lg font-semibold" style={{ color: '#f5f5f5' }}>
+                {event.eventDateAEST}
+              </p>
+              <p className="font-medium" style={{ color: '#c0c0c0' }}>
+                {event.venue}
+              </p>
+              <p className="font-medium" style={{ color: '#a0a0a0' }}>
+                {event.broadcast}
+              </p>
+            </div>
+          </div>
 
           {/* Card Summary */}
-          <div className="bg-slate-900 border border-slate-700 rounded p-4 mb-6">
-            <p className="text-sm text-slate-200 leading-relaxed">
+          <div
+            className="rounded-2xl p-8 mb-8 border-l-4"
+            style={{
+              backgroundColor: '#1a3a34',
+              borderColor: '#ffd700'
+            }}
+          >
+            <p className="text-base leading-relaxed font-medium" style={{ color: '#e0e0e0' }}>
               {event.cardSummary}
             </p>
           </div>
@@ -123,38 +147,44 @@ export default function Home() {
           <button
             onClick={() => refresh()}
             disabled={isRefreshing}
-            className="w-full px-4 py-3 bg-amber-700 hover:bg-amber-600 disabled:opacity-50 rounded text-amber-50 font-bold transition"
+            className="w-full px-8 py-4 font-bold text-lg rounded-xl transition hover:shadow-lg disabled:opacity-50"
+            style={{
+              backgroundColor: '#1d7f1f',
+              color: '#f5f5f5'
+            }}
           >
             {isRefreshing ? "Refreshing..." : "Refresh Card"}
           </button>
         </div>
 
         {/* Tab Buttons */}
-        <div className="flex gap-2 mb-6">
+        <div className="flex gap-4 mb-8">
           <button
             onClick={() => setShowPrelims(false)}
-            className={`flex-1 px-4 py-2 rounded font-semibold transition ${
-              !showPrelims
-                ? "bg-amber-700 text-amber-50"
-                : "bg-slate-800 text-slate-300 hover:bg-slate-700"
-            }`}
+            className="flex-1 px-6 py-3 font-bold rounded-xl transition hover:shadow-lg text-base"
+            style={{
+              backgroundColor: !showPrelims ? '#1d7f1f' : '#1a3a34',
+              color: '#f5f5f5',
+              border: !showPrelims ? 'none' : '2px solid #2d5a52'
+            }}
           >
             Main Card ({mainCardFights.length})
           </button>
           <button
             onClick={() => setShowPrelims(true)}
-            className={`flex-1 px-4 py-2 rounded font-semibold transition ${
-              showPrelims
-                ? "bg-amber-700 text-amber-50"
-                : "bg-slate-800 text-slate-300 hover:bg-slate-700"
-            }`}
+            className="flex-1 px-6 py-3 font-bold rounded-xl transition hover:shadow-lg text-base"
+            style={{
+              backgroundColor: showPrelims ? '#1d7f1f' : '#1a3a34',
+              color: '#f5f5f5',
+              border: showPrelims ? 'none' : '2px solid #2d5a52'
+            }}
           >
             Prelims ({prelimFights.length})
           </button>
         </div>
 
         {/* Fights List */}
-        <div className="space-y-3 pb-6">
+        <div className="space-y-5 pb-8">
           {showPrelims ? (
             prelimFights.length > 0 ? (
               prelimFights.map((fight, idx) => (
@@ -167,7 +197,9 @@ export default function Home() {
                 />
               ))
             ) : (
-              <p className="text-slate-400 text-center py-6">No prelim fights</p>
+              <p className="text-center py-12 font-medium" style={{ color: '#a0a0a0' }}>
+                No prelim fights
+              </p>
             )
           ) : mainCardFights.length > 0 ? (
             mainCardFights.map((fight, idx) => (
@@ -180,12 +212,14 @@ export default function Home() {
               />
             ))
           ) : (
-            <p className="text-slate-400 text-center py-6">No main card fights</p>
+            <p className="text-center py-12 font-medium" style={{ color: '#a0a0a0' }}>
+              No main card fights
+            </p>
           )}
         </div>
 
         {/* Footer */}
-        <div className="text-xs text-slate-500 text-center py-4 border-t border-slate-700">
+        <div className="text-sm text-center py-6 font-medium" style={{ color: '#808080', borderTop: '1px solid #2d5a52' }}>
           {event.fights.length} fights · Cached{" "}
           {new Date(event.generatedAt).toLocaleDateString()} · Updated yearly
         </div>
