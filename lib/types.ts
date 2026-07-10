@@ -16,25 +16,6 @@ export interface Fighter {
   recentFights: RecentFight[];
 }
 
-export interface BoutOdds {
-  fighters: [
-    { decimal: number; bookmaker: string },
-    { decimal: number; bookmaker: string }
-  ];
-  updatedAt: number;
-  favouriteIndex: 0 | 1;
-  impliedProbability: [number, number];
-}
-
-export interface MethodOfVictory {
-  prediction: string;
-  marketPrice?: number;
-  methodMarkets?: {
-    KO: [number, number];
-    Submission: [number, number];
-    Decision: [number, number];
-  };
-}
 
 export type BoutType =
   | "main event"
@@ -73,8 +54,6 @@ export interface Fight {
   fighters: [Fighter, Fighter];
   notableFlag?: NotableFlag;
   editorial: Editorial;
-  odds: BoutOdds;
-  methodOfVictory: MethodOfVictory;
   _changed?: boolean;
 }
 
@@ -87,7 +66,6 @@ export interface CachedEvent {
   broadcast: string;
   fights: Fight[];
   generatedAt: number;
-  oddsLastUpdated: number;
   cardSummary: string;
   nextEvent?: {
     name: string;
@@ -95,7 +73,6 @@ export interface CachedEvent {
   };
   _metadata: {
     generationDurationMs: number;
-    oddsRefreshCount: number;
   };
 }
 

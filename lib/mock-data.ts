@@ -126,24 +126,6 @@ export const mockFightCard: CachedEvent = {
           "Five-round fights favour the cardio fighter",
         ],
       },
-      odds: {
-        fighters: [
-          { decimal: 2.75, bookmaker: "Sportsbet" },
-          { decimal: 1.48, bookmaker: "TAB" },
-        ],
-        updatedAt: Date.now() - 2 * 60 * 60 * 1000, // 2 hours ago
-        favouriteIndex: 1,
-        impliedProbability: [0.36, 0.68],
-      },
-      methodOfVictory: {
-        prediction: "Holloway by decision",
-        marketPrice: 2.1,
-        methodMarkets: {
-          KO: [4.5, 1.8],
-          Submission: [8.0, 12.0],
-          Decision: [2.1, 1.85],
-        },
-      },
     },
     {
       boutIndex: 1,
@@ -229,19 +211,6 @@ export const mockFightCard: CachedEvent = {
           "Paddy's jiu-jitsu is elite",
         ],
       },
-      odds: {
-        fighters: [
-          { decimal: 1.67, bookmaker: "Sportsbet" },
-          { decimal: 2.35, bookmaker: "TAB" },
-        ],
-        updatedAt: Date.now() - 2 * 60 * 60 * 1000,
-        favouriteIndex: 0,
-        impliedProbability: [0.6, 0.43],
-      },
-      methodOfVictory: {
-        prediction: "Saint Denis by submission",
-        marketPrice: 3.2,
-      },
     },
     {
       boutIndex: 2,
@@ -322,24 +291,10 @@ export const mockFightCard: CachedEvent = {
           "Winner gets title shot next",
         ],
       },
-      odds: {
-        fighters: [
-          { decimal: 1.74, bookmaker: "TAB" },
-          { decimal: 2.22, bookmaker: "Sportsbet" },
-        ],
-        updatedAt: Date.now() - 2 * 60 * 60 * 1000,
-        favouriteIndex: 0,
-        impliedProbability: [0.57, 0.45],
-      },
-      methodOfVictory: {
-        prediction: "Sandhagen by decision",
-      },
     },
   ],
   generatedAt: Date.now() - 4 * 60 * 60 * 1000,
-  oddsLastUpdated: Date.now() - 2 * 60 * 60 * 1000,
   _metadata: {
     generationDurationMs: 8500,
-    oddsRefreshCount: 1,
   },
 };

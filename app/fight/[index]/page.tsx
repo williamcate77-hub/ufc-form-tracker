@@ -3,8 +3,6 @@
 import { useCacheState } from "@/hooks/useCacheState";
 import { CachePromptBanner } from "@/components/CachePromptBanner";
 import { FightHeader } from "@/components/FightScreen/FightHeader";
-import { OddsBoard } from "@/components/FightScreen/OddsBoard";
-import { MethodOfVictory } from "@/components/FightScreen/MethodOfVictory";
 import { FormStrips } from "@/components/FightScreen/FormStrips";
 import { StoryContent } from "@/components/FightScreen/StoryContent";
 import { UpNextFooter } from "@/components/FightScreen/UpNextFooter";
@@ -86,16 +84,6 @@ export default function FightScreen() {
             fight={fight}
             totalFights={event.fights.length}
             boutTypeLabel={BOUT_TYPE_LABELS[fight.boutType] || fight.boutType}
-          />
-
-          <OddsBoard
-            fighters={fight.fighters}
-            odds={fight.odds}
-          />
-
-          <MethodOfVictory
-            fighters={fight.fighters}
-            method={fight.methodOfVictory}
           />
 
           <div className="px-4 py-3 border-b border-slate-700">

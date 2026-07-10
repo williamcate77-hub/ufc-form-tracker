@@ -4,7 +4,7 @@ import { handleRefreshRequest } from "@/lib/refresh-engine";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json().catch(() => ({}));
-    const forceMode = body.forceMode as "full" | "odds" | "changes" | undefined;
+    const forceMode = body.forceMode as "full" | "changes" | undefined;
 
     const result = await handleRefreshRequest(forceMode);
 
