@@ -13,17 +13,32 @@ export function PickSummary({ editorial }: PickSummaryProps) {
   return (
     <div className="px-4 py-6 space-y-4 bg-gradient-to-b from-amber-950/20 to-transparent border-b border-amber-900/30">
       {/* The Pick - Main Box */}
-      <div className="bg-amber-900/40 border-l-4 border-amber-600 px-4 py-4 rounded-r-lg">
-        <div className="text-xs uppercase tracking-widest text-amber-300 mb-2 font-semibold">
+      <div className="bg-amber-900/40 border-l-4 border-amber-600 px-4 py-4 rounded-r-lg space-y-2">
+        <div className="text-xs uppercase tracking-widest text-amber-300 mb-3 font-semibold">
           The Pick
         </div>
-        <p className="text-lg font-bold text-slate-50 leading-relaxed mb-3">
-          {editorial.thePick}
-        </p>
+
+        {/* Pick bullets */}
+        <div className="space-y-2">
+          {editorial.thePick.split(". ").map((point, idx, arr) => (
+            <div key={idx} className="flex gap-2 text-sm text-amber-50">
+              <span className="text-amber-400 font-bold flex-shrink-0">•</span>
+              <span>
+                {point}
+                {idx < arr.length - 1 && !point.endsWith(".") ? "." : ""}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {/* Sneaky angle */}
         {editorial.sneakyAngle && (
-          <p className="text-sm text-amber-200 italic leading-relaxed">
-            💡 {editorial.sneakyAngle}
-          </p>
+          <div className="mt-3 pt-3 border-t border-amber-700/50">
+            <p className="text-sm text-amber-100 italic leading-relaxed flex gap-2">
+              <span className="flex-shrink-0">💡</span>
+              <span>{editorial.sneakyAngle}</span>
+            </p>
+          </div>
         )}
       </div>
 
