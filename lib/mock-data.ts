@@ -310,6 +310,446 @@ export const mockFightCard: CachedEvent = {
         ],
       },
     },
+    {
+      boutIndex: 3,
+      boutType: "main card",
+      rounds: 3,
+      division: "Flyweight",
+      notableFlag: undefined,
+      fighters: [
+        {
+          name: "Kayla Harrison",
+          nickname: "The Prodigy",
+          country: "USA",
+          record: "16-1",
+          uFCRecord: "5-1",
+          rank: 3,
+          age: 34,
+          recentFights: [
+            {
+              opponent: "Kara-Jane Murray",
+              result: "W",
+              method: "TKO",
+              year: 2024,
+            },
+            {
+              opponent: "Erin Blanchfield",
+              result: "L",
+              method: "Submission",
+              year: 2023,
+            },
+            {
+              opponent: "Raquel Pennington",
+              result: "W",
+              method: "Decision",
+              year: 2023,
+            },
+          ],
+        },
+        {
+          name: "Alexa Grasso",
+          nickname: "The Queen",
+          country: "Mexico",
+          record: "18-3",
+          uFCRecord: "8-3",
+          rank: 2,
+          age: 32,
+          recentFights: [
+            {
+              opponent: "Valentina Shevchenko",
+              result: "D",
+              method: "Decision",
+              year: 2024,
+            },
+            {
+              opponent: "Valentina Shevchenko",
+              result: "W",
+              method: "Submission",
+              year: 2023,
+            },
+            {
+              opponent: "Viviane Pereira",
+              result: "W",
+              method: "TKO",
+              year: 2022,
+            },
+          ],
+        },
+      ],
+      editorial: {
+        thePick: "Grasso by submission. She beat Shevchenko twice and is -180.",
+        sneakyAngle: "Harrison's judo is elite and she has length advantage.",
+        recentForm:
+          "Grasso is the reigning champion with back-to-back wins over Shevchenko. Harrison had a setback against Blanchfield but has bounced back.",
+        fightingStyle:
+          "Grasso: elite striker with championship experience, submits when needed. Harrison: judo specialist with power, aggressive grappler.",
+        historyBetweenThem: "First meeting.",
+        experienceAndRecord:
+          "Grasso is the champion. Harrison is the biggest threat in the division.",
+        popularityAndPopCulture:
+          "Grasso is massively popular in Mexico and Latin America. Harrison brings Olympic pedigree.",
+        oneLiner:
+          "Champion experience vs undefeated striking. Grasso's cunning vs Harrison's raw athleticism.",
+        oneLinnerSubstantiation: [
+          "Grasso is defending champion",
+          "Harrison is undefeated in UFC",
+          "Grasso's experience edge",
+          "Harrison's athletic potential is off the charts",
+        ],
+      },
+    },
+    {
+      boutIndex: 4,
+      boutType: "featured prelim",
+      rounds: 3,
+      division: "Light Heavyweight",
+      notableFlag: "debut",
+      fighters: [
+        {
+          name: "Robert Whittaker",
+          nickname: "The Reaper",
+          country: "Australia",
+          record: "28-7",
+          uFCRecord: "16-5",
+          rank: 8,
+          age: 35,
+          recentFights: [
+            {
+              opponent: "Dricus du Plessis",
+              result: "L",
+              method: "Submission",
+              year: 2024,
+            },
+            {
+              opponent: "Paulo Costa",
+              result: "W",
+              method: "Decision",
+              year: 2024,
+            },
+            {
+              opponent: "Kelvin Gastelum",
+              result: "W",
+              method: "Decision",
+              year: 2023,
+            },
+          ],
+        },
+        {
+          name: "Jamahal Hill",
+          nickname: "Sweet Dreams",
+          country: "USA",
+          record: "14-1",
+          uFCRecord: "8-1",
+          rank: undefined,
+          age: 32,
+          recentFights: [
+            {
+              opponent: "Alex Pereira",
+              result: "W",
+              method: "KO",
+              year: 2024,
+            },
+            {
+              opponent: "Anthony Smith",
+              result: "W",
+              method: "TKO",
+              year: 2023,
+            },
+            {
+              opponent: "Glover Teixeira",
+              result: "W",
+              method: "Submission",
+              year: 2023,
+            },
+          ],
+        },
+      ],
+      editorial: {
+        thePick: "Hill by knockout. He is -200 and has knockout power.",
+        sneakyAngle: "Whittaker's experience and toughness could grind.",
+        recentForm:
+          "Hill is on a winning streak with finishes. Whittaker lost his last fight to du Plessis but is moving up to light heavyweight.",
+        fightingStyle:
+          "Hill: elite striking with power, former champion. Whittaker: well-rounded, great cardio, volume striker.",
+        historyBetweenThem: "First meeting.",
+        experienceAndRecord:
+          "Whittaker is moving up in weight. Hill is the light heavyweight champion.",
+        popularityAndPopCulture:
+          "Both are fan favourites. Whittaker is beloved in Australia.",
+        oneLiner:
+          "Champion power puncher against legendary middleweight in debut at 205.",
+        oneLinnerSubstantiation: [
+          "Hill is the current champion",
+          "Hill has significant knockout power",
+          "Whittaker is moving up in weight for first time",
+          "This determines if Hill is real or not",
+        ],
+      },
+    },
+    {
+      boutIndex: 5,
+      boutType: "prelim",
+      rounds: 3,
+      division: "Welterweight",
+      notableFlag: undefined,
+      fighters: [
+        {
+          name: "Jack Della Maddalena",
+          nickname: "The Hammer",
+          country: "Australia",
+          record: "15-0",
+          uFCRecord: "6-0",
+          rank: undefined,
+          age: 26,
+          recentFights: [
+            {
+              opponent: "Jared Gooden",
+              result: "W",
+              method: "TKO",
+              year: 2024,
+            },
+            {
+              opponent: "Tristan Connelly",
+              result: "W",
+              method: "KO",
+              year: 2024,
+            },
+            {
+              opponent: "Viacheslav Borshchenko",
+              result: "W",
+              method: "Submission",
+              year: 2024,
+            },
+          ],
+        },
+        {
+          name: "Neil Magny",
+          nickname: "The Prospect",
+          country: "USA",
+          record: "29-11",
+          uFCRecord: "23-9",
+          rank: undefined,
+          age: 36,
+          recentFights: [
+            {
+              opponent: "Gilbert Burns",
+              result: "L",
+              method: "Decision",
+              year: 2024,
+            },
+            {
+              opponent: "Michael Page",
+              result: "L",
+              method: "KO",
+              year: 2024,
+            },
+            {
+              opponent: "Shawn Brady",
+              result: "W",
+              method: "Decision",
+              year: 2023,
+            },
+          ],
+        },
+      ],
+      editorial: {
+        thePick: "Della Maddalena by knockout. He is -280 and undefeated.",
+        sneakyAngle: "Magny's experience and distance management could disrupt.",
+        recentForm:
+          "Della Maddalena is undefeated with all finishes. Magny is on a skid.",
+        fightingStyle:
+          "Della Maddalena: aggressive pressure, heavy hands, young and hungry. Magny: defensive, uses distance, grinds.",
+        historyBetweenThem: "First meeting.",
+        experienceAndRecord:
+          "Della Maddalena is the prospect, Magny is the veteran looking for a win.",
+        popularityAndPopCulture:
+          "Della Maddalena is rising fast. Magny is respected vet.",
+        oneLiner:
+          "Undefeated young gun with finishing power against veteran survivor.",
+        oneLinnerSubstantiation: [
+          "Della Maddalena is 15-0 overall",
+          "All 6 UFC wins are finishes",
+          "Magny is 0-2 in last fights",
+          "Clear talent gap favours Australian",
+        ],
+      },
+    },
+    {
+      boutIndex: 6,
+      boutType: "prelim",
+      rounds: 3,
+      division: "Featherweight",
+      notableFlag: undefined,
+      fighters: [
+        {
+          name: "Ilia Topuria",
+          nickname: "El Matador",
+          country: "Spain",
+          record: "15-0",
+          uFCRecord: "8-0",
+          rank: undefined,
+          age: 27,
+          recentFights: [
+            {
+              opponent: "Max Holloway",
+              result: "W",
+              method: "KO",
+              year: 2024,
+            },
+            {
+              opponent: "Alexander Volkanovski",
+              result: "W",
+              method: "TKO",
+              year: 2023,
+            },
+            {
+              opponent: "Yair Rodriguez",
+              result: "W",
+              method: "TKO",
+              year: 2023,
+            },
+          ],
+        },
+        {
+          name: "Arnold Allen",
+          nickname: "The Pitbull",
+          country: "UK",
+          record: "19-1",
+          uFCRecord: "10-1",
+          rank: undefined,
+          age: 30,
+          recentFights: [
+            {
+              opponent: "Giga Chikadze",
+              result: "W",
+              method: "Decision",
+              year: 2024,
+            },
+            {
+              opponent: "Calvin Kattar",
+              result: "W",
+              method: "Decision",
+              year: 2023,
+            },
+            {
+              opponent: "Dan Ige",
+              result: "W",
+              method: "TKO",
+              year: 2023,
+            },
+          ],
+        },
+      ],
+      editorial: {
+        thePick: "Topuria by submission. He is -320, the champion.",
+        sneakyAngle: "Allen's durability and wrestling could grind rounds.",
+        recentForm:
+          "Topuria is undefeated and just knocked out Holloway. Allen has won three straight.",
+        fightingStyle:
+          "Topuria: striking specialist, devastating power, champion. Allen: all-rounder with wrestling.",
+        historyBetweenThem: "First meeting.",
+        experienceAndRecord:
+          "Topuria is the featherweight champion. Allen is the challenger.",
+        popularityAndPopCulture:
+          "Topuria is a Spanish sensation. Allen is respected vet.",
+        oneLiner:
+          "Undefeated champion with scary striking vs durable challenger.",
+        oneLinnerSubstantiation: [
+          "Topuria just knocked out Holloway",
+          "Topuria is undefeated",
+          "Allen is on a win streak",
+          "Champion belt on the line",
+        ],
+      },
+    },
+    {
+      boutIndex: 7,
+      boutType: "prelim",
+      rounds: 3,
+      division: "Middleweight",
+      notableFlag: undefined,
+      fighters: [
+        {
+          name: "Sean Strickland",
+          nickname: "Tarzan",
+          country: "USA",
+          record: "29-6",
+          uFCRecord: "15-4",
+          rank: undefined,
+          age: 33,
+          recentFights: [
+            {
+              opponent: "Dricus du Plessis",
+              result: "W",
+              method: "Decision",
+              year: 2024,
+            },
+            {
+              opponent: "Paulo Costa",
+              result: "W",
+              method: "TKO",
+              year: 2024,
+            },
+            {
+              opponent: "Jared Cannonier",
+              result: "W",
+              method: "Decision",
+              year: 2023,
+            },
+          ],
+        },
+        {
+          name: "Nassourdine Imavov",
+          nickname: "Russian Hammer",
+          country: "Russia",
+          record: "14-3",
+          uFCRecord: "6-3",
+          rank: undefined,
+          age: 28,
+          recentFights: [
+            {
+              opponent: "Roman Kopylov",
+              result: "W",
+              method: "TKO",
+              year: 2024,
+            },
+            {
+              opponent: "Brendan Allen",
+              result: "W",
+              method: "Decision",
+              year: 2024,
+            },
+            {
+              opponent: "Warlley Alves",
+              result: "W",
+              method: "Decision",
+              year: 2023,
+            },
+          ],
+        },
+      ],
+      editorial: {
+        thePick: "Strickland by decision. He is slightly favoured at -115.",
+        sneakyAngle: "Imavov's wrestling could turn this into a grappling match.",
+        recentForm:
+          "Both are on winning streaks. Strickland is the bigger name.",
+        fightingStyle:
+          "Strickland: volume striker, cardio machine. Imavov: well-rounded with wrestling.",
+        historyBetweenThem: "First meeting.",
+        experienceAndRecord:
+          "Strickland is more experienced at high levels. Imavov is rising.",
+        popularityAndPopCulture:
+          "Strickland is known for his outspoken nature. Imavov is quiet pro.",
+        oneLiner:
+          "Volume striker vs well-rounded rising prospect in middleweight showcase.",
+        oneLinnerSubstantiation: [
+          "Strickland just beat du Plessis",
+          "Imavov's wrestling is getting better",
+          "Both are on hot streaks",
+          "Winner could get title shot",
+        ],
+      },
+    },
   ],
   generatedAt: Date.now() - 4 * 60 * 60 * 1000,
   _metadata: {
