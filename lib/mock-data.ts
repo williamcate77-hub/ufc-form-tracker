@@ -119,11 +119,14 @@ export const mockFightCard: CachedEvent = {
         oneLiner:
           "Five years of ring rust against the busiest man in the sport. If Conor does not land the left hand in two rounds, Max drowns him.",
         oneLinnerSubstantiation: [
+          // Fast facts
+          "McGregor lost 3 of his last 4 fights before this",
+          "Holloway has 24 UFC wins vs McGregor's 9",
           "McGregor hasn't fought in 5 years (since July 2021)",
-          "Holloway has fought constantly against elite competition",
-          "Holloway has the highest striking volume in UFC history",
-          "McGregor's left hand is devastating but only effective early",
-          "Five-round fights favour the cardio fighter",
+          // Strategic context
+          "Five-round fights heavily favour cardio machines like Holloway",
+          "McGregor's power is a first-two-rounds weapon; Holloway gets stronger late",
+          "Holloway's striking volume (highest in UFC history) drowns strikers who can't sustain pace",
         ],
       },
     },
