@@ -65,7 +65,8 @@ class KVCacheAdapter implements CacheAdapter {
   async set(key: string, value: CachedEvent): Promise<void> {
     try {
       const kv = await import("@vercel/kv").then((m) => m.kv);
-      await kv.set(key, JSON.stringify(value));
+      const oneYearInSeconds = 365 * 24 * 60 * 60;
+      await kv.set(key, JSON.stringify(value), { ex: oneYearInSeconds });
     } catch (error) {
       console.error("KV set failed:", error);
     }
