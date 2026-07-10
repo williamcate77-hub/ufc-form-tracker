@@ -1,14 +1,12 @@
 "use client";
 
 import { Editorial } from "@/lib/types";
-import { useState } from "react";
 
 interface StoryContentProps {
   editorial: Editorial;
 }
 
 export function StoryContent({ editorial }: StoryContentProps) {
-  const [showSubstantiation, setShowSubstantiation] = useState(false);
 
   return (
     <div className="px-4 py-4 space-y-6">
@@ -91,37 +89,6 @@ export function StoryContent({ editorial }: StoryContentProps) {
         </p>
       </div>
 
-      {/* One-liner as pull quote */}
-      <div className="bg-slate-900 border-l-4 border-amber-600 px-4 py-3 my-4">
-        <p className="text-sm italic text-slate-100 leading-relaxed">
-          "{editorial.oneLiner}"
-        </p>
-      </div>
-
-      {/* Substantiation dropdown */}
-      {editorial.oneLinnerSubstantiation &&
-        editorial.oneLinnerSubstantiation.length > 0 && (
-          <div>
-            <button
-              onClick={() => setShowSubstantiation(!showSubstantiation)}
-              className="flex items-center gap-2 text-sm text-amber-400 hover:text-amber-300 font-medium transition"
-            >
-              <span>{showSubstantiation ? "▼" : "▶"}</span>
-              Why this pick
-            </button>
-
-            {showSubstantiation && (
-              <ul className="mt-2 space-y-2 ml-4">
-                {editorial.oneLinnerSubstantiation.map((point, idx) => (
-                  <li key={idx} className="text-sm text-slate-300 flex gap-2">
-                    <span className="text-amber-500 flex-shrink-0">•</span>
-                    <span>{point}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        )}
     </div>
   );
 }

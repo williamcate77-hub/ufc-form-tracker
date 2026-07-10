@@ -3,6 +3,7 @@
 import { useCacheState } from "@/hooks/useCacheState";
 import { CachePromptBanner } from "@/components/CachePromptBanner";
 import { FightHeader } from "@/components/FightScreen/FightHeader";
+import { PickSummary } from "@/components/FightScreen/PickSummary";
 import { FormStrips } from "@/components/FightScreen/FormStrips";
 import { StoryContent } from "@/components/FightScreen/StoryContent";
 import { UpNextFooter } from "@/components/FightScreen/UpNextFooter";
@@ -85,6 +86,8 @@ export default function FightScreen() {
             totalFights={event.fights.length}
             boutTypeLabel={BOUT_TYPE_LABELS[fight.boutType] || fight.boutType}
           />
+
+          <PickSummary editorial={fight.editorial} />
 
           <div className="px-4 py-3 border-b border-slate-700">
             <h3 className="text-sm font-bold text-slate-50 mb-3">
