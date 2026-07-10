@@ -25,16 +25,6 @@ export function StoryContent({ editorial }: StoryContentProps) {
         )}
       </div>
 
-      {/* Recent Form */}
-      <div>
-        <div className="text-xs uppercase tracking-widest text-slate-400 mb-2">
-          Recent Form
-        </div>
-        <p className="text-sm text-slate-300 leading-relaxed">
-          {editorial.recentForm}
-        </p>
-      </div>
-
       {/* Fighting Style */}
       <div>
         <div className="text-xs uppercase tracking-widest text-slate-400 mb-2">
