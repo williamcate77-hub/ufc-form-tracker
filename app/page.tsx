@@ -13,6 +13,8 @@ const BOUT_TYPE_LABELS: Record<string, string> = {
   prelim: "Prelim",
 };
 
+// Fighter form tracker - updated design
+
 export default function Home() {
   const { event, loading, error, cacheStatus, isRefreshing, refresh } =
     useCacheState();
