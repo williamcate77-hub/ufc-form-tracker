@@ -6,7 +6,7 @@ export const mockFightCard: CachedEvent = {
   eventDate: "2026-07-12T04:00:00Z",
   eventDateAEST: "Sun 12 Jul 2026, 2:00pm AEST",
   venue: "Madison Square Garden, New York",
-  broadcast: "Main card ESPN+ 7pm AEST",
+  broadcast: "Prelims from 10am, main card 2pm AEST on ESPN+",
   cardSummary:
     "McGregor returns after five years to face Holloway in the main event. A brutal rematch between two legends with completely different careers in between. BSD brings the pressure to Paddy in the co-main. Sandhagen and Bautista is the real title eliminator. Kavanagh is the next big name at flyweight. Our Rob wins his light heavyweight debut on points.",
   nextEvent: {
