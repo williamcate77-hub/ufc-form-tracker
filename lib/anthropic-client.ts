@@ -1,58 +1,72 @@
-import { ANTHROPIC_API_KEY, GENERATION_TIMEOUT } from "./constants";
-import { Fight, CachedEvent } from "./types";
+import Anthropic from "@anthropic-ai/sdk";
+import { ANTHROPIC_API_KEY } from "./constants";
+import { Fight } from "./types";
 import { mockFightCard } from "./mock-data";
 
-const ANTHROPIC_BASE_URL = "https://api.anthropic.com/v1";
-
-interface AnthropicMessage {
-  content: Array<{ type: string; text?: string }>;
+function isMockMode(): boolean {
+  return (
+    !ANTHROPIC_API_KEY ||
+    ANTHROPIC_API_KEY.includes("test") ||
+    ANTHROPIC_API_KEY.includes("your_key")
+  );
 }
 
+function getClient(): Anthropic {
+  return new Anthropic({ apiKey: ANTHROPIC_API_KEY });
+}
+
+/**
+ * Run a generation with web search enabled so event data (fighters, dates,
+ * records, odds) is grounded in current reality instead of training data.
+ * Streams to avoid HTTP timeouts on long generations.
+ */
 async function callClaude(prompt: string): Promise<string> {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), GENERATION_TIMEOUT);
+  const client = getClient();
 
-  try {
-    const response = await fetch(`${ANTHROPIC_BASE_URL}/messages`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": ANTHROPIC_API_KEY,
-        "anthropic-version": "2023-06-01",
-      },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 16000,
-        messages: [
-          {
-            role: "user",
-            content: prompt,
-          },
-        ],
-      }),
-      signal: controller.signal,
-    });
+  const message = await client.messages
+    .stream({
+      model: "claude-opus-4-8",
+      max_tokens: 32000,
+      thinking: { type: "adaptive" },
+      tools: [
+        {
+          type: "web_search_20260209",
+          name: "web_search",
+          max_uses: 10,
+        },
+      ],
+      messages: [{ role: "user", content: prompt }],
+    })
+    .finalMessage();
 
-    clearTimeout(timeoutId);
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(
-        `Anthropic API error: ${response.status} ${JSON.stringify(error)}`
-      );
-    }
-
-    const data = (await response.json()) as AnthropicMessage;
-    const textContent = data.content.find((c) => c.type === "text");
-    if (!textContent || !textContent.text) {
-      throw new Error("No text content in response");
-    }
-
-    return textContent.text;
-  } catch (error) {
-    clearTimeout(timeoutId);
-    throw error;
+  if (message.stop_reason === "refusal") {
+    throw new Error("Generation was declined by the model");
   }
+
+  // The JSON payload is the final text block (earlier blocks are thinking
+  // and web search activity)
+  const textBlocks = message.content.filter(
+    (b): b is Anthropic.TextBlock => b.type === "text"
+  );
+  const last = textBlocks[textBlocks.length - 1];
+  if (!last?.text) {
+    throw new Error("No text content in response");
+  }
+
+  return last.text;
+}
+
+function parseJsonResponse<T>(response: string): T {
+  // Remove markdown code fences if present, and any preamble before the JSON
+  const cleaned = response
+    .replace(/^[\s\S]*?```json\n?/, "")
+    .replace(/\n?```[\s\S]*$/, "")
+    .trim();
+  const jsonStart = cleaned.indexOf("{");
+  if (jsonStart === -1) {
+    throw new Error("No JSON object found in response");
+  }
+  return JSON.parse(cleaned.slice(jsonStart)) as T;
 }
 
 export async function generateFightCard(): Promise<{
@@ -66,7 +80,7 @@ export async function generateFightCard(): Promise<{
   nextEvent?: { name: string; date: string };
 }> {
   // Use mock data if no API key
-  if (!ANTHROPIC_API_KEY || ANTHROPIC_API_KEY.includes("test") || ANTHROPIC_API_KEY.includes("your_key")) {
+  if (isMockMode()) {
     console.log("Using mock fight card data (no API key configured)");
     return {
       fights: mockFightCard.fights,
@@ -80,7 +94,7 @@ export async function generateFightCard(): Promise<{
     };
   }
 
-  const prompt = `You are a UFC analyst. Search the web for the next upcoming UFC event (either a numbered event like UFC 300 or a Fight Night card). Find and return ONLY a valid JSON object (no markdown fences, no explanations) with this exact structure:
+  const prompt = `You are a UFC analyst. Use web search to find the next upcoming UFC event (either a numbered event like UFC 300 or a Fight Night card) and verify every fact you output: the exact event date and start time, the full fight card, each fighter's record, age, height, reach, stance and recent results. After researching, return ONLY a valid JSON object (no markdown fences, no explanations) with this exact structure:
 
 {
   "eventName": "UFC 300",
@@ -166,6 +180,8 @@ export async function generateFightCard(): Promise<{
 }
 
 Important rules:
+- Use web search to verify the event, the date, and every fighter's details. Do not rely on memory
+- eventDate must be the exact UTC start time of the main card as an ISO 8601 string. Get this right: cross-check the announced local start time and convert to UTC carefully
 - Return ONLY valid JSON, no markdown, no explanations
 - fighter.rank is null if not ranked, otherwise an integer
 - heightCm and reachCm are integers in centimetres; stance is "Orthodox", "Southpaw" or "Switch". Use null if unknown
@@ -173,7 +189,7 @@ Important rules:
 - round is the round the fight ended (integer); omit or null for decisions
 - Division and boutType must be exact (main event, co-main, main card, featured prelim, prelim)
 - Editorial content must be Australian spelling (favour not favor, honour, centre)
-- Odds references in thePick use Australian decimal odds and US-style bookmaker odds (-210 means 2.1)
+- Odds references in thePick use current real bookmaker prices found via search
 - No em dashes, no emojis, no exclamation marks in copy
 - boutIndex starts at 0 for main event
 - Include all main card and featured prelims; can skip some lower prelims if many fights`;
@@ -181,12 +197,7 @@ Important rules:
   const response = await callClaude(prompt);
 
   try {
-    // Remove markdown code fences if present
-    const cleaned = response
-      .replace(/^```json\n?/, "")
-      .replace(/\n?```$/, "")
-      .trim();
-    return JSON.parse(cleaned);
+    return parseJsonResponse(response);
   } catch (error) {
     console.error("JSON parse error:", response);
     throw new Error(`Failed to parse Claude response: ${error}`);
@@ -198,7 +209,7 @@ export async function regenerateSingleFight(
   eventName: string,
   fighterNames: [string, string]
 ): Promise<Fight> {
-  const prompt = `You are a UFC analyst. Regenerate the editorial breakdown for a single UFC fight. Return ONLY valid JSON (no markdown fences):
+  const prompt = `You are a UFC analyst. Use web search to verify current details, then regenerate the breakdown for a single fight on ${eventName}: ${fighterNames[0]} vs ${fighterNames[1]}. Return ONLY valid JSON (no markdown fences) matching this structure:
 
 {
   "boutIndex": ${fightIndex},
@@ -215,27 +226,33 @@ export async function regenerateSingleFight(
       "uFCRecord": "...",
       "rank": null,
       "age": 0,
-      "recentFights": [...]
+      "heightCm": null,
+      "reachCm": null,
+      "stance": null,
+      "recentFights": []
     },
     {
       "name": "${fighterNames[1]}",
-      ...
+      "nickname": "...",
+      "country": "...",
+      "record": "...",
+      "uFCRecord": "...",
+      "rank": null,
+      "age": 0,
+      "heightCm": null,
+      "reachCm": null,
+      "stance": null,
+      "recentFights": []
     }
   ],
-  "editorial": { ... },
-  "odds": { ... },
-  "methodOfVictory": { ... }
+  "editorial": {}
 }
 
 Ensure all fields match the schema exactly. Return JSON only.`;
 
   const response = await callClaude(prompt);
   try {
-    const cleaned = response
-      .replace(/^```json\n?/, "")
-      .replace(/\n?```$/, "")
-      .trim();
-    return JSON.parse(cleaned);
+    return parseJsonResponse<Fight>(response);
   } catch (error) {
     throw new Error(`Failed to parse single fight regeneration: ${error}`);
   }

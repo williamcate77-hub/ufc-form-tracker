@@ -2,6 +2,7 @@ import { CachedEvent, RefreshStatus, Fight } from "./types";
 import { getCachedEvent, cacheEvent } from "./cache";
 import { generateFightCard, regenerateSingleFight } from "./anthropic-client";
 import { FIGHT_DAY_THRESHOLD } from "./constants";
+import { formatSydney } from "./dates";
 
 function isEventPassed(eventDateISO: string): boolean {
   return new Date(eventDateISO) < new Date();
@@ -60,7 +61,8 @@ export async function executeRefresh(
         eventId: generated.eventName.replace(/\s+/g, "_"),
         eventName: generated.eventName,
         eventDate: generated.eventDate,
-        eventDateAEST: generated.eventDateAEST,
+        // Computed locally from the ISO date — never trust LLM timezone maths
+        eventDateAEST: formatSydney(generated.eventDate),
         venue: generated.venue,
         broadcast: generated.broadcast,
         fights: generated.fights,

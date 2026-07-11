@@ -3,8 +3,8 @@ import { CachedEvent } from "./types";
 export const mockFightCard: CachedEvent = {
   eventId: "UFC_300",
   eventName: "UFC 300",
-  eventDate: "2026-07-26T18:00:00Z",
-  eventDateAEST: "Sun 26 Jul 2026, 2:00pm AEST",
+  eventDate: "2026-07-12T04:00:00Z",
+  eventDateAEST: "Sun 12 Jul 2026, 2:00pm AEST",
   venue: "Madison Square Garden, New York",
   broadcast: "Main card ESPN+ 7pm AEST",
   cardSummary:
