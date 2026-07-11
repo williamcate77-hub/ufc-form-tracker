@@ -1609,7 +1609,7 @@ export const mockFightCard: CachedEvent = {
       },
     },
   ],
-  generatedAt: Date.now() - 4 * 60 * 60 * 1000,
+  generatedAt: Date.now(),
   _metadata: {
     generationDurationMs: 8500,
   },
