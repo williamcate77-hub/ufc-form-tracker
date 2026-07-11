@@ -119,17 +119,6 @@ export default function Home() {
             <h1 className="text-6xl font-black mb-4" style={{ color: '#ffd700' }}>
               {event.eventName}
             </h1>
-            <div className="space-y-2">
-              <p className="text-lg font-semibold" style={{ color: '#f5f5f5' }}>
-                {event.eventDateAEST}
-              </p>
-              <p className="font-medium" style={{ color: '#c0c0c0' }}>
-                {event.venue}
-              </p>
-              <p className="font-medium" style={{ color: '#a0a0a0' }}>
-                {event.broadcast}
-              </p>
-            </div>
           </div>
 
           {/* Card Summary */}
