@@ -38,20 +38,21 @@ export function CachePromptBanner({
   }
 
   return (
-    <div className="sticky top-0 z-40 backdrop-blur-md bg-blue-950/40 border-b border-blue-800/50 px-4 py-3 flex items-center justify-between gap-3 text-sm">
-      <p className="text-blue-100">{message}</p>
+    <div className="sticky top-0 z-40 flex items-center justify-between gap-3 border-b border-white/10 bg-zinc-950/80 px-4 py-3 text-sm backdrop-blur-xl">
+      <p className="text-zinc-300">{message}</p>
       <div className="flex items-center gap-2">
         <button
           onClick={() => onRefresh(mode)}
           disabled={isRefreshing}
-          className="px-4 py-1.5 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 disabled:opacity-50 rounded-lg text-white text-sm font-semibold transition-all duration-200 shadow-md"
+          className="rounded-full bg-red-600 px-4 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-red-500 disabled:opacity-50"
         >
           {isRefreshing ? "Refreshing..." : actionLabel}
         </button>
         <button
           onClick={() => setDismissed(true)}
           disabled={isRefreshing}
-          className="px-2 py-1 text-blue-200 hover:text-blue-100 disabled:opacity-50 transition"
+          aria-label="Dismiss"
+          className="px-2 py-1 text-zinc-500 transition-colors hover:text-zinc-200 disabled:opacity-50"
         >
           ✕
         </button>

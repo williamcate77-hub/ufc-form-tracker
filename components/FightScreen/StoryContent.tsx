@@ -6,79 +6,46 @@ interface StoryContentProps {
   editorial: Editorial;
 }
 
+interface Section {
+  label: string;
+  text?: string;
+  accent?: boolean;
+}
+
 export function StoryContent({ editorial }: StoryContentProps) {
+  const sections: Section[] = [
+    { label: "The Pick", text: editorial.thePick, accent: true },
+    { label: "Recent Form", text: editorial.recentForm },
+    { label: "Fighting Style", text: editorial.fightingStyle },
+    { label: "History Between Them", text: editorial.historyBetweenThem },
+    { label: "Weight Class", text: editorial.weightClassMovement },
+    { label: "Experience & Record", text: editorial.experienceAndRecord },
+    { label: "Popularity & Pop Culture", text: editorial.popularityAndPopCulture },
+  ];
 
   return (
-    <div className="px-4 py-4 space-y-6">
-      {/* The Pick */}
-      <div>
-        <div className="text-xs uppercase tracking-widest text-slate-400 mb-2">
-          The Pick
-        </div>
-        <p className="text-sm text-slate-200 leading-relaxed">
-          {editorial.thePick}
-        </p>
-        {editorial.sneakyAngle && (
-          <p className="text-sm text-amber-300 leading-relaxed mt-2 italic">
-            Sneaky angle: {editorial.sneakyAngle}
-          </p>
-        )}
-      </div>
-
-      {/* Fighting Style */}
-      <div>
-        <div className="text-xs uppercase tracking-widest text-slate-400 mb-2">
-          Fighting Style
-        </div>
-        <p className="text-sm text-slate-300 leading-relaxed">
-          {editorial.fightingStyle}
-        </p>
-      </div>
-
-      {/* History */}
-      {editorial.historyBetweenThem && (
-        <div>
-          <div className="text-xs uppercase tracking-widest text-slate-400 mb-2">
-            History Between Them
+    <div className="px-4 py-6 space-y-6">
+      {sections
+        .filter((s) => s.text)
+        .map((section) => (
+          <div key={section.label}>
+            <div
+              className={`mb-2 text-[10px] font-semibold uppercase tracking-[0.25em] ${
+                section.accent ? "text-red-400" : "text-zinc-500"
+              }`}
+            >
+              {section.label}
+            </div>
+            <p className="text-sm leading-relaxed text-zinc-300">
+              {section.text}
+            </p>
+            {section.accent && editorial.sneakyAngle && (
+              <p className="mt-2 text-sm italic leading-relaxed text-zinc-500">
+                Sneaky angle: {editorial.sneakyAngle}
+              </p>
+            )}
           </div>
-          <p className="text-sm text-slate-300 leading-relaxed">
-            {editorial.historyBetweenThem}
-          </p>
-        </div>
-      )}
-
-      {/* Weight Class Movement */}
-      {editorial.weightClassMovement && (
-        <div>
-          <div className="text-xs uppercase tracking-widest text-slate-400 mb-2">
-            Weight Class
-          </div>
-          <p className="text-sm text-slate-300 leading-relaxed">
-            {editorial.weightClassMovement}
-          </p>
-        </div>
-      )}
-
-      {/* Experience and Record */}
-      <div>
-        <div className="text-xs uppercase tracking-widest text-slate-400 mb-2">
-          Experience & Record
-        </div>
-        <p className="text-sm text-slate-300 leading-relaxed">
-          {editorial.experienceAndRecord}
-        </p>
-      </div>
-
-      {/* Popularity and Pop Culture */}
-      <div>
-        <div className="text-xs uppercase tracking-widest text-slate-400 mb-2">
-          Popularity & Pop Culture
-        </div>
-        <p className="text-sm text-slate-300 leading-relaxed">
-          {editorial.popularityAndPopCulture}
-        </p>
-      </div>
-
+        ))}
     </div>
   );
 }

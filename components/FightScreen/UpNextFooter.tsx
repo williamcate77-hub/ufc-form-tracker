@@ -20,10 +20,10 @@ export function UpNextFooter({
     return (
       <Link
         href="/card-wrap"
-        className="sticky bottom-0 bg-slate-900 border-t border-slate-700 px-4 py-3 text-sm font-medium text-slate-50 hover:bg-slate-800 transition flex items-center justify-between"
+        className="sticky bottom-0 z-30 flex items-center justify-between border-t border-white/10 bg-zinc-950/80 px-5 py-4 backdrop-blur-xl transition-colors hover:bg-zinc-900/80"
       >
-        <span>Card wrap</span>
-        <span>→</span>
+        <span className="text-sm font-semibold text-zinc-100">Card wrap</span>
+        <span className="text-zinc-500">→</span>
       </Link>
     );
   }
@@ -33,18 +33,19 @@ export function UpNextFooter({
   return (
     <Link
       href={`/fight/${currentIndex + 1}`}
-      className="sticky bottom-0 bg-slate-900 border-t border-slate-700 px-4 py-3 text-sm hover:bg-slate-800 transition flex items-center justify-between cursor-pointer"
+      className="sticky bottom-0 z-30 flex items-center justify-between border-t border-white/10 bg-zinc-950/80 px-5 py-3 backdrop-blur-xl transition-colors hover:bg-zinc-900/80"
     >
-      <div className="flex-1 min-w-0">
-        <div className="text-slate-400 text-xs mb-1">Up next</div>
-        <div className="text-slate-50 font-medium truncate">
-          {nextFight.fighters[0].name} vs {nextFight.fighters[1].name}
+      <div className="min-w-0 flex-1">
+        <div className="mb-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500">
+          Up next
         </div>
-        <div className="text-slate-400 text-xs">
-          {nextFight.division}
+        <div className="truncate text-sm font-semibold text-zinc-100">
+          {nextFight.fighters[0].name}{" "}
+          <span className="text-zinc-600">vs</span>{" "}
+          {nextFight.fighters[1].name}
         </div>
       </div>
-      <div className="text-slate-400 ml-2 flex-shrink-0">→</div>
+      <span className="ml-3 shrink-0 text-zinc-500">→</span>
     </Link>
   );
 }

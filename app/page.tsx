@@ -13,21 +13,31 @@ const BOUT_TYPE_LABELS: Record<string, string> = {
   prelim: "Prelim",
 };
 
+function OctagonMark({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 48 48" className={className} aria-hidden="true">
+      <polygon
+        points="39.5,30.5 30.5,39.5 17.5,39.5 8.5,30.5 8.5,17.5 17.5,8.5 30.5,8.5 39.5,17.5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="3"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export default function Home() {
   const { event, loading, error, cacheStatus, isRefreshing, refresh } =
     useCacheState();
-  const [showPrelims, setShowPrelims] = useState(true);
+  const [showPrelims, setShowPrelims] = useState(false);
 
   if (loading) {
     return (
       <div className="flex flex-1 items-center justify-center">
         <div className="text-center">
-          <div className="mb-4">
-            <div className="inline-block">
-              <div className="animate-spin rounded-full h-12 w-12 border-2 border-cyan-500 border-t-transparent"></div>
-            </div>
-          </div>
-          <div className="text-slate-300">Loading fight card...</div>
+          <OctagonMark className="mx-auto mb-4 h-10 w-10 animate-pulse text-red-500" />
+          <div className="text-sm text-zinc-500">Loading fight card...</div>
         </div>
       </div>
     );
@@ -36,16 +46,15 @@ export default function Home() {
   if (error && !cacheStatus) {
     return (
       <div className="flex flex-1 items-center justify-center px-4">
-        <div className="text-center max-w-sm">
-          <div className="mb-4 text-4xl">⚠️</div>
-          <h1 className="text-3xl font-bold text-slate-50 mb-2">
+        <div className="w-full max-w-sm text-center">
+          <h1 className="mb-2 text-2xl font-bold tracking-tight text-zinc-50">
             Something went wrong
           </h1>
-          <p className="text-slate-400 mb-6">{error}</p>
+          <p className="mb-6 text-sm text-zinc-400">{error}</p>
           <button
             onClick={() => refresh("full")}
             disabled={isRefreshing}
-            className="w-full px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 disabled:opacity-50 rounded-lg text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-cyan-500/30"
+            className="w-full rounded-xl bg-red-600 px-6 py-3 font-semibold text-white transition-all hover:bg-red-500 active:scale-[0.99] disabled:opacity-50"
           >
             {isRefreshing ? "Refreshing..." : "Try again"}
           </button>
@@ -66,22 +75,25 @@ export default function Home() {
         )}
 
         <div className="flex flex-1 items-center justify-center px-4">
-          <div className="text-center max-w-md">
-            <div className="mb-6">
-              <div className="text-6xl mb-2">🥊</div>
+          <div className="w-full max-w-sm text-center">
+            <OctagonMark className="mx-auto mb-6 h-14 w-14 text-red-500" />
+            <div className="mb-3 text-[10px] font-bold uppercase tracking-[0.35em] text-red-400">
+              Fight Week Form Guide
             </div>
-            <h1 className="text-4xl font-bold text-slate-50 mb-2 tracking-tight">
-              UFC Form Tracker
+            <h1 className="mb-2 text-4xl font-black uppercase tracking-tight text-zinc-50">
+              UFC Form
+              <br />
+              Tracker
             </h1>
-            <p className="text-lg text-slate-400 mb-8">
-              Your personal fight-week form guide
+            <p className="mb-8 text-sm text-zinc-500">
+              Every fight on the next card, broken down.
             </p>
             <button
               onClick={() => refresh("full")}
               disabled={isRefreshing}
-              className="w-full px-8 py-4 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 hover:from-cyan-400 hover:via-blue-400 hover:to-purple-400 disabled:opacity-50 rounded-lg text-white font-bold text-lg transition-all duration-300 shadow-xl hover:shadow-cyan-500/40 transform hover:scale-105"
+              className="w-full rounded-xl bg-red-600 px-6 py-3.5 font-bold text-white shadow-lg shadow-red-600/25 transition-all hover:bg-red-500 active:scale-[0.99] disabled:opacity-50"
             >
-              {isRefreshing ? "Building card..." : "Load the card"}
+              {isRefreshing ? "Building the card..." : "Load the card"}
             </button>
           </div>
         </div>
@@ -99,8 +111,10 @@ export default function Home() {
       f.boutType === "main card"
   );
 
+  const visibleFights = showPrelims ? prelimFights : mainCardFights;
+
   return (
-    <div className="flex flex-col flex-1 min-h-screen">
+    <div className="flex flex-col flex-1">
       {cacheStatus && (
         <CachePromptBanner
           status={cacheStatus}
@@ -109,98 +123,88 @@ export default function Home() {
         />
       )}
 
-      <div className="flex flex-col flex-1 px-4 py-8 max-w-4xl mx-auto w-full overflow-y-auto">
-        {/* Event Header */}
-        <div className="mb-10">
-          <div className="mb-6">
-            <h1 className="text-5xl font-bold text-slate-50 mb-2 tracking-tight">
-              {event.eventName}
-            </h1>
-            <div className="flex flex-wrap gap-4 text-sm">
-              <span className="text-cyan-400 font-medium">{event.eventDateAEST}</span>
-              <span className="text-slate-400">•</span>
-              <span className="text-slate-400">{event.venue}</span>
-              <span className="text-slate-400">•</span>
-              <span className="text-slate-400">{event.broadcast}</span>
-            </div>
+      <div className="mx-auto flex w-full max-w-2xl flex-col flex-1 px-4 pb-4 pt-8">
+        {/* Event header */}
+        <div className="mb-6">
+          <div className="mb-2 flex items-center justify-between">
+            <span className="text-[10px] font-bold uppercase tracking-[0.35em] text-red-400">
+              Next Event
+            </span>
+            <button
+              onClick={() => refresh()}
+              disabled={isRefreshing}
+              className="text-xs text-zinc-500 transition-colors hover:text-zinc-200 disabled:opacity-50"
+            >
+              {isRefreshing ? "Refreshing..." : "↻ Refresh"}
+            </button>
           </div>
-
-          {/* Card Summary */}
-          <div className="backdrop-blur-md bg-slate-800/40 border border-slate-700/50 rounded-xl p-6 mb-8 hover:border-cyan-500/30 transition-all duration-300 shadow-lg">
-            <p className="text-slate-200 leading-relaxed">
-              {event.cardSummary}
+          <h1 className="mb-3 text-5xl font-black uppercase tracking-tight text-zinc-50">
+            {event.eventName}
+          </h1>
+          <div className="space-y-0.5 text-sm">
+            <p className="font-medium text-zinc-300">{event.eventDateAEST}</p>
+            <p className="text-zinc-500">
+              {event.venue} · {event.broadcast}
             </p>
           </div>
-
-          {/* Refresh Button */}
-          <button
-            onClick={() => refresh()}
-            disabled={isRefreshing}
-            className="w-full px-6 py-3 bg-gradient-to-r from-slate-700 to-slate-600 hover:from-slate-600 hover:to-slate-500 disabled:opacity-50 rounded-lg text-slate-100 font-semibold transition-all duration-200 shadow-lg border border-slate-600/50 hover:border-slate-500/50"
-          >
-            {isRefreshing ? "Refreshing..." : "Refresh Card"}
-          </button>
         </div>
 
-        {/* Tab Buttons */}
-        <div className="flex gap-3 mb-8">
+        {/* Card summary */}
+        <div className="mb-6 rounded-2xl border border-white/[0.07] bg-white/[0.03] p-5">
+          <p className="text-sm leading-relaxed text-zinc-300">
+            {event.cardSummary}
+          </p>
+        </div>
+
+        {/* Segmented control */}
+        <div className="mb-5 flex rounded-full border border-white/[0.08] bg-white/[0.04] p-1">
           <button
             onClick={() => setShowPrelims(false)}
-            className={`flex-1 px-6 py-3 rounded-lg font-semibold transition-all duration-200 ${
+            className={`flex-1 rounded-full px-4 py-2 text-sm font-semibold transition-all duration-200 ${
               !showPrelims
-                ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/30"
-                : "bg-slate-800/50 text-slate-300 hover:bg-slate-700/50 border border-slate-700/50 hover:border-slate-600/50"
+                ? "bg-zinc-100 text-zinc-900 shadow"
+                : "text-zinc-400 hover:text-zinc-200"
             }`}
           >
-            Main Card ({mainCardFights.length})
+            Main Card · {mainCardFights.length}
           </button>
           <button
             onClick={() => setShowPrelims(true)}
-            className={`flex-1 px-6 py-3 rounded-lg font-semibold transition-all duration-200 ${
+            className={`flex-1 rounded-full px-4 py-2 text-sm font-semibold transition-all duration-200 ${
               showPrelims
-                ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/30"
-                : "bg-slate-800/50 text-slate-300 hover:bg-slate-700/50 border border-slate-700/50 hover:border-slate-600/50"
+                ? "bg-zinc-100 text-zinc-900 shadow"
+                : "text-zinc-400 hover:text-zinc-200"
             }`}
           >
-            Prelims ({prelimFights.length})
+            Prelims · {prelimFights.length}
           </button>
         </div>
 
-        {/* Fights List */}
-        <div className="space-y-4 pb-8">
-          {showPrelims ? (
-            prelimFights.length > 0 ? (
-              prelimFights.map((fight, idx) => (
-                <FightCard
-                  key={fight.boutIndex}
-                  fight={fight}
-                  index={fight.boutIndex}
-                  totalFights={event.fights.length}
-                  boutTypeLabel={BOUT_TYPE_LABELS[fight.boutType] || fight.boutType}
-                />
-              ))
-            ) : (
-              <p className="text-slate-400 text-center py-8">No prelim fights</p>
-            )
-          ) : mainCardFights.length > 0 ? (
-            mainCardFights.map((fight, idx) => (
+        {/* Fights */}
+        <div className="space-y-3 pb-6">
+          {visibleFights.length > 0 ? (
+            visibleFights.map((fight) => (
               <FightCard
                 key={fight.boutIndex}
                 fight={fight}
                 index={fight.boutIndex}
                 totalFights={event.fights.length}
-                boutTypeLabel={BOUT_TYPE_LABELS[fight.boutType] || fight.boutType}
+                boutTypeLabel={
+                  BOUT_TYPE_LABELS[fight.boutType] || fight.boutType
+                }
               />
             ))
           ) : (
-            <p className="text-slate-400 text-center py-8">No main card fights</p>
+            <p className="py-8 text-center text-sm text-zinc-500">
+              {showPrelims ? "No prelim fights" : "No main card fights"}
+            </p>
           )}
         </div>
 
         {/* Footer */}
-        <div className="text-xs text-slate-500 text-center py-6 border-t border-slate-700/50 mt-auto">
+        <div className="mt-auto border-t border-white/[0.06] py-5 text-center text-xs text-zinc-600">
           {event.fights.length} fights · Cached{" "}
-          {new Date(event.generatedAt).toLocaleDateString()} · Updated yearly
+          {new Date(event.generatedAt).toLocaleDateString()}
         </div>
       </div>
     </div>

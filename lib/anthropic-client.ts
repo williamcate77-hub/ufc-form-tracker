@@ -109,11 +109,15 @@ export async function generateFightCard(): Promise<{
           "uFCRecord": "9-4",
           "rank": null,
           "age": 36,
+          "heightCm": 175,
+          "reachCm": 188,
+          "stance": "Southpaw",
           "recentFights": [
             {
               "opponent": "Dustin Poirier",
               "result": "L",
               "method": "KO",
+              "round": 2,
               "year": 2021
             }
           ]
@@ -126,11 +130,15 @@ export async function generateFightCard(): Promise<{
           "uFCRecord": "24-9",
           "rank": 1,
           "age": 33,
+          "heightCm": 180,
+          "reachCm": 175,
+          "stance": "Orthodox",
           "recentFights": [
             {
               "opponent": "Ilia Topuria",
               "result": "L",
               "method": "KO",
+              "round": 3,
               "year": 2024
             }
           ]
@@ -160,7 +168,9 @@ export async function generateFightCard(): Promise<{
 Important rules:
 - Return ONLY valid JSON, no markdown, no explanations
 - fighter.rank is null if not ranked, otherwise an integer
+- heightCm and reachCm are integers in centimetres; stance is "Orthodox", "Southpaw" or "Switch". Use null if unknown
 - Recent fights are last 3-5 fights, most recent first
+- round is the round the fight ended (integer); omit or null for decisions
 - Division and boutType must be exact (main event, co-main, main card, featured prelim, prelim)
 - Editorial content must be Australian spelling (favour not favor, honour, centre)
 - Odds references in thePick use Australian decimal odds and US-style bookmaker odds (-210 means 2.1)
