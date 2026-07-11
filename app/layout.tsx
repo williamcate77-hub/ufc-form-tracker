@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -15,19 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "UFC Form Tracker",
   description: "Your personal UFC fight-week form guide",
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "black-translucent",
-    title: "Form Tracker",
-  },
-};
-
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  maximumScale: 1,
-  viewportFit: "cover",
-  themeColor: "#09090b",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
 };
 
 export default function RootLayout({
@@ -40,7 +28,9 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
     >
-      <body className="min-h-full flex flex-col text-zinc-50">{children}</body>
+      <body className="min-h-full flex flex-col" style={{ backgroundColor: '#0f2818', color: '#f5f5f5' }}>
+        {children}
+      </body>
     </html>
   );
 }

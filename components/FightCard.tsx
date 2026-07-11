@@ -1,7 +1,6 @@
 "use client";
 
 import { Fight } from "@/lib/types";
-import { FormStrip } from "@/components/FormStrip";
 import Link from "next/link";
 
 interface FightCardProps {
@@ -11,79 +10,96 @@ interface FightCardProps {
   boutTypeLabel: string;
 }
 
-const CORNER_DOT = ["bg-red-500", "bg-blue-500"];
+function getResultColor(result: string): string {
+  switch (result) {
+    case "W":
+      return "bg-emerald-500";
+    case "L":
+      return "bg-rose-500";
+    case "D":
+    case "NC":
+      return "bg-gray-500";
+    default:
+      return "bg-gray-500";
+  }
+}
 
-export function FightCard({ fight, index, boutTypeLabel }: FightCardProps) {
-  const isHeadline =
-    fight.boutType === "main event" || fight.boutType === "co-main";
-  const isMainEvent = fight.boutType === "main event";
+export function FightCard({
+  fight,
+  index,
+  totalFights,
+  boutTypeLabel,
+}: FightCardProps) {
+  const [fighter1, fighter2] = fight.fighters;
 
   return (
-    <Link href={`/fight/${index}`} className="group block">
+    <Link href={`/fight/${index}`}>
       <div
-        className={`rounded-2xl border p-4 transition-all duration-200 group-active:scale-[0.99] ${
-          isMainEvent
-            ? "border-red-500/25 bg-red-500/[0.04] group-hover:border-red-500/40 group-hover:bg-red-500/[0.06]"
-            : "border-white/[0.07] bg-white/[0.03] group-hover:border-white/20 group-hover:bg-white/[0.05]"
-        }`}
+        className="block rounded-2xl transition hover:shadow-lg hover:scale-105 duration-300 overflow-hidden border-l-4"
+        style={{
+          backgroundColor: '#1a3a34',
+          borderColor: '#ffd700',
+          padding: '24px'
+        }}
       >
         {/* Bout type and division */}
-        <div className="mb-4 flex items-center justify-between">
-          <span
-            className={`text-[10px] font-bold uppercase tracking-[0.2em] ${
-              isHeadline ? "text-red-400" : "text-zinc-500"
-            }`}
-          >
+        <div className="flex items-center justify-between mb-6">
+          <span className="text-xs font-bold uppercase tracking-wider" style={{ color: '#ffd700' }}>
             {boutTypeLabel}
           </span>
-          <span className="flex items-center gap-1.5 text-xs text-zinc-500">
+          <span className="text-xs font-semibold" style={{ color: '#a0a0a0' }}>
             {fight.division}
-            <span className="text-zinc-600 transition-transform duration-200 group-hover:translate-x-0.5">
-              ›
-            </span>
           </span>
         </div>
 
-        {/* Fighters */}
-        <div className="mb-4 space-y-3">
-          {fight.fighters.map((fighter, idx) => (
-            <div
-              key={idx}
-              className="flex items-center justify-between gap-3"
-            >
-              <div className="min-w-0 flex-1">
-                <div className="flex items-baseline gap-2">
-                  <span
-                    className={`h-1.5 w-1.5 shrink-0 self-center rounded-full ${CORNER_DOT[idx]}`}
-                  />
-                  <h3 className="truncate text-sm font-bold text-zinc-50">
+        {/* Fighter matchup */}
+        <div className="space-y-6 mb-6">
+          {[fighter1, fighter2].map((fighter, idx) => (
+            <div key={idx} className="flex items-start justify-between gap-4">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-baseline gap-2 mb-2">
+                  <h3 className="font-black text-lg" style={{ color: '#f5f5f5' }}>
                     {fighter.name}
                   </h3>
-                  {fighter.rank != null && (
-                    <span className="font-mono text-xs font-semibold text-zinc-400">
+                  {fighter.rank && (
+                    <span className="text-sm font-bold" style={{ color: '#ffd700' }}>
                       #{fighter.rank}
                     </span>
                   )}
                 </div>
-                <div className="ml-3.5 mt-0.5 font-mono text-xs text-zinc-500">
-                  <span className="whitespace-nowrap">{fighter.record}</span>
-                  <span className="mx-1.5 text-zinc-700">·</span>
-                  <span className="whitespace-nowrap">
-                    <span className="text-zinc-600">UFC </span>
-                    {fighter.uFCRecord}
+                <div className="flex items-center gap-3 text-xs font-medium mb-3" style={{ color: '#a0a0a0' }}>
+                  <span>
+                    <span style={{ color: '#f5f5f5' }}>{fighter.age}</span>yo
+                  </span>
+                  <span>•</span>
+                  <span>
+                    <span style={{ color: '#f5f5f5' }}>{fighter.record}</span> Pro
+                  </span>
+                  <span>•</span>
+                  <span>
+                    <span style={{ color: '#f5f5f5' }}>{fighter.uFCRecord}</span> UFC
                   </span>
                 </div>
-              </div>
 
-              <div className="shrink-0">
-                <FormStrip fights={fighter.recentFights} size="sm" />
+                {/* Recent fights - larger and clearer */}
+                <div className="flex gap-2 flex-wrap">
+                  {fighter.recentFights.slice(0, 5).map((recentFight, fidx) => (
+                    <div
+                      key={fidx}
+                      title={`${recentFight.result} vs ${recentFight.opponent} (${recentFight.method}, ${recentFight.year})`}
+                      className={`w-12 h-12 ${getResultColor(recentFight.result)} rounded-lg flex items-center justify-center text-white font-bold cursor-help hover:ring-2 ring-yellow-400 transition text-sm`}
+                    >
+                      {recentFight.result}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           ))}
         </div>
 
-        {/* One-liner */}
-        <div className="border-t border-white/[0.06] pt-3 text-xs leading-relaxed text-zinc-500 transition-colors group-hover:text-zinc-400">
+        {/* Summary line */}
+        <div className="text-sm leading-relaxed pt-6" style={{ color: '#c0c0c0', borderTop: '1px solid #2d5a52' }}>
           {fight.editorial.oneLiner}
         </div>
       </div>

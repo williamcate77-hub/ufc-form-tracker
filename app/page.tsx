@@ -13,32 +13,18 @@ const BOUT_TYPE_LABELS: Record<string, string> = {
   prelim: "Prelim",
 };
 
-function OctagonMark({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 48 48" className={className} aria-hidden="true">
-      <polygon
-        points="39.5,30.5 30.5,39.5 17.5,39.5 8.5,30.5 8.5,17.5 17.5,8.5 30.5,8.5 39.5,17.5"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="3"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
+// Fighter form tracker - updated design
 
 export default function Home() {
   const { event, loading, error, cacheStatus, isRefreshing, refresh } =
     useCacheState();
-  const [showPrelims, setShowPrelims] = useState(false);
-  const [summaryExpanded, setSummaryExpanded] = useState(false);
+  const [showPrelims, setShowPrelims] = useState(true);
 
   if (loading) {
     return (
       <div className="flex flex-1 items-center justify-center">
         <div className="text-center">
-          <OctagonMark className="mx-auto mb-4 h-10 w-10 animate-pulse text-red-500" />
-          <div className="text-sm text-zinc-500">Loading fight card...</div>
+          <div style={{ color: '#a0a0a0' }}>Loading...</div>
         </div>
       </div>
     );
@@ -46,16 +32,20 @@ export default function Home() {
 
   if (error && !cacheStatus) {
     return (
-      <div className="flex flex-1 items-center justify-center px-4">
-        <div className="w-full max-w-sm text-center">
-          <h1 className="mb-2 text-2xl font-bold tracking-tight text-zinc-50">
+      <div className="flex flex-1 items-center justify-center px-6">
+        <div className="text-center max-w-sm">
+          <h1 className="text-2xl font-bold mb-3" style={{ color: '#f5f5f5' }}>
             Something went wrong
           </h1>
-          <p className="mb-6 text-sm text-zinc-400">{error}</p>
+          <p className="mb-6" style={{ color: '#a0a0a0' }}>{error}</p>
           <button
             onClick={() => refresh("full")}
             disabled={isRefreshing}
-            className="w-full rounded-xl bg-red-600 px-6 py-3 font-semibold text-white transition-all hover:bg-red-500 active:scale-[0.99] disabled:opacity-50"
+            className="px-6 py-3 font-bold rounded-xl transition hover:shadow-lg disabled:opacity-50"
+            style={{
+              backgroundColor: '#1d7f1f',
+              color: '#f5f5f5'
+            }}
           >
             {isRefreshing ? "Refreshing..." : "Try again"}
           </button>
@@ -64,36 +54,43 @@ export default function Home() {
     );
   }
 
-  if (!event) {
-    // No banner here: the landing button is the only CTA
+  if (!event && !cacheStatus?.eventId) {
     return (
       <div className="flex flex-col flex-1">
-        <div className="flex flex-1 items-center justify-center px-4">
-          <div className="w-full max-w-sm text-center">
-            <OctagonMark className="mx-auto mb-6 h-14 w-14 text-red-500" />
-            <div className="mb-3 text-[10px] font-bold uppercase tracking-[0.35em] text-red-400">
-              Fight Week Form Guide
-            </div>
-            <h1 className="mb-2 text-4xl font-black uppercase tracking-tight text-zinc-50">
+        {cacheStatus && (
+          <CachePromptBanner
+            status={cacheStatus}
+            isRefreshing={isRefreshing}
+            onRefresh={refresh}
+          />
+        )}
+
+        <div className="flex flex-1 items-center justify-center px-6">
+          <div className="text-center max-w-sm">
+            <h1 className="text-5xl font-black mb-6" style={{ color: '#ffd700' }}>
               UFC Form
-              <br />
-              Tracker
             </h1>
-            <p className="mb-8 text-sm text-zinc-500">
-              Every fight on the next card, broken down.
+            <p className="text-lg mb-8 font-medium" style={{ color: '#c0c0c0' }}>
+              Your personal fight-week form guide
             </p>
             <button
               onClick={() => refresh("full")}
               disabled={isRefreshing}
-              className="w-full rounded-xl bg-red-600 px-6 py-3.5 font-bold text-white shadow-lg shadow-red-600/25 transition-all hover:bg-red-500 active:scale-[0.99] disabled:opacity-50"
+              className="w-full px-8 py-4 font-bold text-lg rounded-xl transition hover:shadow-lg disabled:opacity-50"
+              style={{
+                backgroundColor: '#1d7f1f',
+                color: '#f5f5f5'
+              }}
             >
-              {isRefreshing ? "Building the card..." : "Load the card"}
+              {isRefreshing ? "Building card..." : "Load the card"}
             </button>
           </div>
         </div>
       </div>
     );
   }
+
+  if (!event) return null;
 
   const prelimFights = event.fights.filter(
     (f) => f.boutType === "prelim" || f.boutType === "featured prelim"
@@ -105,10 +102,8 @@ export default function Home() {
       f.boutType === "main card"
   );
 
-  const visibleFights = showPrelims ? prelimFights : mainCardFights;
-
   return (
-    <div className="flex flex-col flex-1">
+    <div className="flex flex-col flex-1 overflow-y-auto">
       {cacheStatus && (
         <CachePromptBanner
           status={cacheStatus}
@@ -117,100 +112,118 @@ export default function Home() {
         />
       )}
 
-      <div className="mx-auto flex w-full max-w-2xl flex-col flex-1 px-4 pb-4 pt-[calc(2rem+env(safe-area-inset-top))]">
-        {/* Event header */}
-        <div className="mb-6">
-          <div className="mb-2 flex items-center justify-between">
-            <span className="text-[10px] font-bold uppercase tracking-[0.35em] text-red-400">
-              Next Event
-            </span>
-            <button
-              onClick={() => refresh()}
-              disabled={isRefreshing}
-              className="text-xs text-zinc-500 transition-colors hover:text-zinc-200 disabled:opacity-50"
-            >
-              {isRefreshing ? "Refreshing..." : "↻ Refresh"}
-            </button>
+      <div className="flex flex-col flex-1 px-6 py-8 max-w-4xl mx-auto w-full">
+        {/* Event Header */}
+        <div className="mb-12">
+          <div className="mb-8">
+            <h1 className="text-6xl font-black mb-4" style={{ color: '#ffd700' }}>
+              {event.eventName}
+            </h1>
+            <div className="space-y-2">
+              <p className="text-lg font-semibold" style={{ color: '#f5f5f5' }}>
+                {event.eventDateAEST}
+              </p>
+              <p className="font-medium" style={{ color: '#c0c0c0' }}>
+                {event.venue}
+              </p>
+              <p className="font-medium" style={{ color: '#a0a0a0' }}>
+                {event.broadcast}
+              </p>
+            </div>
           </div>
-          <h1 className="mb-3 text-5xl font-black uppercase tracking-tight text-zinc-50">
-            {event.eventName}
-          </h1>
-          <div className="space-y-0.5 text-sm">
-            <p className="font-medium text-zinc-300">{event.eventDateAEST}</p>
-            <p className="text-zinc-500">
-              {event.venue} · {event.broadcast}
+
+          {/* Card Summary */}
+          <div
+            className="rounded-2xl p-8 mb-8 border-l-4"
+            style={{
+              backgroundColor: '#1a3a34',
+              borderColor: '#ffd700'
+            }}
+          >
+            <p className="text-base leading-relaxed font-medium" style={{ color: '#e0e0e0' }}>
+              {event.cardSummary}
             </p>
           </div>
-        </div>
 
-        {/* Card summary */}
-        <div className="mb-6 rounded-2xl border border-white/[0.07] bg-white/[0.03] p-5">
-          <p
-            className={`text-sm leading-relaxed text-zinc-300 ${
-              summaryExpanded ? "" : "line-clamp-4"
-            }`}
+          {/* Refresh Button */}
+          <button
+            onClick={() => refresh()}
+            disabled={isRefreshing}
+            className="w-full px-8 py-4 font-bold text-lg rounded-xl transition hover:shadow-lg disabled:opacity-50"
+            style={{
+              backgroundColor: '#1d7f1f',
+              color: '#f5f5f5'
+            }}
           >
-            {event.cardSummary}
-          </p>
-          {event.cardSummary.length > 220 && (
-            <button
-              onClick={() => setSummaryExpanded(!summaryExpanded)}
-              className="mt-2 text-xs font-semibold text-zinc-500 transition-colors hover:text-zinc-300"
-            >
-              {summaryExpanded ? "Less" : "More"}
-            </button>
-          )}
+            {isRefreshing ? "Refreshing..." : "Refresh Card"}
+          </button>
         </div>
 
-        {/* Segmented control */}
-        <div className="mb-5 flex rounded-full border border-white/[0.08] bg-white/[0.04] p-1">
+        {/* Tab Buttons */}
+        <div className="flex gap-4 mb-8">
           <button
             onClick={() => setShowPrelims(false)}
-            className={`flex-1 rounded-full px-4 py-2 text-sm font-semibold transition-all duration-200 ${
-              !showPrelims
-                ? "bg-zinc-100 text-zinc-900 shadow"
-                : "text-zinc-400 hover:text-zinc-200"
-            }`}
+            className="flex-1 px-6 py-3 font-bold rounded-xl transition hover:shadow-lg text-base"
+            style={{
+              backgroundColor: !showPrelims ? '#1d7f1f' : '#1a3a34',
+              color: '#f5f5f5',
+              border: !showPrelims ? 'none' : '2px solid #2d5a52'
+            }}
           >
-            Main Card · {mainCardFights.length}
+            Main Card ({mainCardFights.length})
           </button>
           <button
             onClick={() => setShowPrelims(true)}
-            className={`flex-1 rounded-full px-4 py-2 text-sm font-semibold transition-all duration-200 ${
-              showPrelims
-                ? "bg-zinc-100 text-zinc-900 shadow"
-                : "text-zinc-400 hover:text-zinc-200"
-            }`}
+            className="flex-1 px-6 py-3 font-bold rounded-xl transition hover:shadow-lg text-base"
+            style={{
+              backgroundColor: showPrelims ? '#1d7f1f' : '#1a3a34',
+              color: '#f5f5f5',
+              border: showPrelims ? 'none' : '2px solid #2d5a52'
+            }}
           >
-            Prelims · {prelimFights.length}
+            Prelims ({prelimFights.length})
           </button>
         </div>
 
-        {/* Fights */}
-        <div className="space-y-3 pb-6">
-          {visibleFights.length > 0 ? (
-            visibleFights.map((fight) => (
+        {/* Fights List */}
+        <div className="space-y-5 pb-8">
+          {showPrelims ? (
+            prelimFights.length > 0 ? (
+              prelimFights.map((fight, idx) => (
+                <FightCard
+                  key={fight.boutIndex}
+                  fight={fight}
+                  index={fight.boutIndex}
+                  totalFights={event.fights.length}
+                  boutTypeLabel={BOUT_TYPE_LABELS[fight.boutType] || fight.boutType}
+                />
+              ))
+            ) : (
+              <p className="text-center py-12 font-medium" style={{ color: '#a0a0a0' }}>
+                No prelim fights
+              </p>
+            )
+          ) : mainCardFights.length > 0 ? (
+            mainCardFights.map((fight, idx) => (
               <FightCard
                 key={fight.boutIndex}
                 fight={fight}
                 index={fight.boutIndex}
                 totalFights={event.fights.length}
-                boutTypeLabel={
-                  BOUT_TYPE_LABELS[fight.boutType] || fight.boutType
-                }
+                boutTypeLabel={BOUT_TYPE_LABELS[fight.boutType] || fight.boutType}
               />
             ))
           ) : (
-            <p className="py-8 text-center text-sm text-zinc-500">
-              {showPrelims ? "No prelim fights" : "No main card fights"}
+            <p className="text-center py-12 font-medium" style={{ color: '#a0a0a0' }}>
+              No main card fights
             </p>
           )}
         </div>
 
         {/* Footer */}
-        <div className="mt-auto border-t border-white/[0.06] py-5 text-center text-xs text-zinc-600">
+        <div className="text-sm text-center py-6 font-medium" style={{ color: '#808080', borderTop: '1px solid #2d5a52' }}>
           {event.fights.length} fights · Cached{" "}
-          {new Date(event.generatedAt).toLocaleDateString()}
+          {new Date(event.generatedAt).toLocaleDateString()} · Updated yearly
         </div>
       </div>
     </div>
