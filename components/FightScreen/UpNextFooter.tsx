@@ -20,7 +20,7 @@ export function UpNextFooter({
     return (
       <Link
         href="/card-wrap"
-        className="sticky bottom-0 z-30 flex items-center justify-between border-t border-white/10 bg-zinc-950/80 px-5 py-4 backdrop-blur-xl transition-colors hover:bg-zinc-900/80"
+        className="sticky bottom-0 z-30 flex items-center justify-between border-t border-white/10 bg-zinc-950/80 px-5 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom))] backdrop-blur-xl transition-colors hover:bg-zinc-900/80"
       >
         <span className="text-sm font-semibold text-zinc-100">Card wrap</span>
         <span className="text-zinc-500">→</span>
@@ -33,7 +33,7 @@ export function UpNextFooter({
   return (
     <Link
       href={`/fight/${currentIndex + 1}`}
-      className="sticky bottom-0 z-30 flex items-center justify-between border-t border-white/10 bg-zinc-950/80 px-5 py-3 backdrop-blur-xl transition-colors hover:bg-zinc-900/80"
+      className="sticky bottom-0 z-30 flex items-center justify-between border-t border-white/10 bg-zinc-950/80 px-5 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] backdrop-blur-xl transition-colors hover:bg-zinc-900/80"
     >
       <div className="min-w-0 flex-1">
         <div className="mb-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500">

@@ -16,10 +16,17 @@ const CORNER_DOT = ["bg-red-500", "bg-blue-500"];
 export function FightCard({ fight, index, boutTypeLabel }: FightCardProps) {
   const isHeadline =
     fight.boutType === "main event" || fight.boutType === "co-main";
+  const isMainEvent = fight.boutType === "main event";
 
   return (
     <Link href={`/fight/${index}`} className="group block">
-      <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] p-4 transition-all duration-200 group-hover:border-white/20 group-hover:bg-white/[0.05] group-active:scale-[0.99]">
+      <div
+        className={`rounded-2xl border p-4 transition-all duration-200 group-active:scale-[0.99] ${
+          isMainEvent
+            ? "border-red-500/25 bg-red-500/[0.04] group-hover:border-red-500/40 group-hover:bg-red-500/[0.06]"
+            : "border-white/[0.07] bg-white/[0.03] group-hover:border-white/20 group-hover:bg-white/[0.05]"
+        }`}
+      >
         {/* Bout type and division */}
         <div className="mb-4 flex items-center justify-between">
           <span
@@ -29,7 +36,12 @@ export function FightCard({ fight, index, boutTypeLabel }: FightCardProps) {
           >
             {boutTypeLabel}
           </span>
-          <span className="text-xs text-zinc-500">{fight.division}</span>
+          <span className="flex items-center gap-1.5 text-xs text-zinc-500">
+            {fight.division}
+            <span className="text-zinc-600 transition-transform duration-200 group-hover:translate-x-0.5">
+              ›
+            </span>
+          </span>
         </div>
 
         {/* Fighters */}
@@ -52,7 +64,6 @@ export function FightCard({ fight, index, boutTypeLabel }: FightCardProps) {
                       #{fighter.rank}
                     </span>
                   )}
-                  <span className="text-xs text-zinc-600">{fighter.age}</span>
                 </div>
                 <div className="ml-3.5 mt-0.5 font-mono text-xs text-zinc-500">
                   <span className="whitespace-nowrap">{fighter.record}</span>

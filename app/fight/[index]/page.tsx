@@ -22,6 +22,9 @@ const BOUT_TYPE_LABELS: Record<string, string> = {
 
 const SWIPE_THRESHOLD = 60;
 
+// Module-level so the entry direction survives route changes between fights
+let lastNavDirection: "next" | "prev" = "next";
+
 export default function FightScreen() {
   const params = useParams();
   const router = useRouter();
@@ -33,10 +36,12 @@ export default function FightScreen() {
 
   // Swipe left → next fight (or card wrap), swipe right → previous fight (or home)
   function goNext() {
+    lastNavDirection = "next";
     if (index < totalFights - 1) router.push(`/fight/${index + 1}`);
     else router.push("/card-wrap");
   }
   function goPrev() {
+    lastNavDirection = "prev";
     if (index > 0) router.push(`/fight/${index - 1}`);
     else router.push("/");
   }
@@ -134,7 +139,7 @@ export default function FightScreen() {
         onTouchEnd={onTouchEnd}
       >
         {/* Sticky nav with segmented progress */}
-        <div className="sticky top-0 z-30 border-b border-white/[0.07] bg-zinc-950/80 px-4 pb-3 pt-2 backdrop-blur-xl">
+        <div className="sticky top-0 z-30 border-b border-white/[0.07] bg-zinc-950/80 px-4 pb-3 pt-[calc(0.5rem+env(safe-area-inset-top))] backdrop-blur-xl">
           <div className="flex items-center justify-between py-1.5">
             <Link
               href="/"
@@ -152,6 +157,9 @@ export default function FightScreen() {
                 key={i}
                 href={`/fight/${i}`}
                 aria-label={`Fight ${i + 1}`}
+                onClick={() => {
+                  lastNavDirection = i > index ? "next" : "prev";
+                }}
                 className={`h-1 flex-1 rounded-full transition-colors ${
                   i === index
                     ? "bg-red-500"
@@ -164,7 +172,12 @@ export default function FightScreen() {
           </div>
         </div>
 
-        <div className="flex flex-1 flex-col overflow-y-auto pb-4">
+        <div
+          key={index}
+          className={`flex flex-1 flex-col overflow-y-auto pb-4 ${
+            lastNavDirection === "next" ? "fight-enter-next" : "fight-enter-prev"
+          }`}
+        >
           <FightHeader
             fight={fight}
             totalFights={event.fights.length}

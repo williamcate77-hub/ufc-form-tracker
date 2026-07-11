@@ -31,6 +31,7 @@ export default function Home() {
   const { event, loading, error, cacheStatus, isRefreshing, refresh } =
     useCacheState();
   const [showPrelims, setShowPrelims] = useState(false);
+  const [summaryExpanded, setSummaryExpanded] = useState(false);
 
   if (loading) {
     return (
@@ -64,16 +65,9 @@ export default function Home() {
   }
 
   if (!event) {
+    // No banner here: the landing button is the only CTA
     return (
       <div className="flex flex-col flex-1">
-        {cacheStatus && (
-          <CachePromptBanner
-            status={cacheStatus}
-            isRefreshing={isRefreshing}
-            onRefresh={refresh}
-          />
-        )}
-
         <div className="flex flex-1 items-center justify-center px-4">
           <div className="w-full max-w-sm text-center">
             <OctagonMark className="mx-auto mb-6 h-14 w-14 text-red-500" />
@@ -123,7 +117,7 @@ export default function Home() {
         />
       )}
 
-      <div className="mx-auto flex w-full max-w-2xl flex-col flex-1 px-4 pb-4 pt-8">
+      <div className="mx-auto flex w-full max-w-2xl flex-col flex-1 px-4 pb-4 pt-[calc(2rem+env(safe-area-inset-top))]">
         {/* Event header */}
         <div className="mb-6">
           <div className="mb-2 flex items-center justify-between">
@@ -151,9 +145,21 @@ export default function Home() {
 
         {/* Card summary */}
         <div className="mb-6 rounded-2xl border border-white/[0.07] bg-white/[0.03] p-5">
-          <p className="text-sm leading-relaxed text-zinc-300">
+          <p
+            className={`text-sm leading-relaxed text-zinc-300 ${
+              summaryExpanded ? "" : "line-clamp-4"
+            }`}
+          >
             {event.cardSummary}
           </p>
+          {event.cardSummary.length > 220 && (
+            <button
+              onClick={() => setSummaryExpanded(!summaryExpanded)}
+              className="mt-2 text-xs font-semibold text-zinc-500 transition-colors hover:text-zinc-300"
+            >
+              {summaryExpanded ? "Less" : "More"}
+            </button>
+          )}
         </div>
 
         {/* Segmented control */}

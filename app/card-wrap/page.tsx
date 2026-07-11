@@ -42,7 +42,7 @@ export default function CardWrap() {
         />
       )}
 
-      <div className="mx-auto flex w-full max-w-2xl flex-col flex-1 px-4 py-6">
+      <div className="mx-auto flex w-full max-w-2xl flex-col flex-1 px-4 pb-6 pt-[calc(1.5rem+env(safe-area-inset-top))]">
         <Link
           href="/"
           className="mb-6 text-sm text-zinc-400 transition-colors hover:text-zinc-100"

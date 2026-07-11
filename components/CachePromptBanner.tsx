@@ -38,7 +38,7 @@ export function CachePromptBanner({
   }
 
   return (
-    <div className="sticky top-0 z-40 flex items-center justify-between gap-3 border-b border-white/10 bg-zinc-950/80 px-4 py-3 text-sm backdrop-blur-xl">
+    <div className="sticky top-0 z-40 flex items-center justify-between gap-3 border-b border-white/10 bg-zinc-950/80 px-4 pb-3 pt-[calc(0.75rem+env(safe-area-inset-top))] text-sm backdrop-blur-xl">
       <p className="text-zinc-300">{message}</p>
       <div className="flex items-center gap-2">
         <button

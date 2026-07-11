@@ -22,12 +22,15 @@ interface FormStripProps {
   /** sm = compact read-only tiles (home cards); md = tappable tiles with detail row (fight screen) */
   size?: "sm" | "md";
   interactive?: boolean;
+  /** Fired on the first tile tap, e.g. to dismiss the usage hint */
+  onInteract?: () => void;
 }
 
 export function FormStrip({
   fights,
   size = "md",
   interactive = false,
+  onInteract,
 }: FormStripProps) {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   const shown = fights.slice(0, 5);
@@ -66,6 +69,7 @@ export function FormStrip({
               e.preventDefault();
               e.stopPropagation();
               setOpenIdx(openIdx === i ? null : i);
+              onInteract?.();
             }}
             className={`${tileSize} ${TILE_STYLES[f.result]} flex items-center justify-center border font-bold transition-all duration-150 ${
               openIdx === i
