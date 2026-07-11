@@ -9,56 +9,47 @@ interface PickSummaryProps {
 
 export function PickSummary({ editorial }: PickSummaryProps) {
   const [showSubstantiation, setShowSubstantiation] = useState(false);
+  const points = editorial.oneLinnerSubstantiation ?? [];
 
   return (
-    <div className="px-4 py-6 space-y-4 bg-gradient-to-b from-amber-950/20 to-transparent border-b border-amber-900/30">
-      {/* One-liner Pull Quote - Hero */}
-      <div className="bg-slate-800 border-2 border-amber-600 rounded-lg px-5 py-5">
-        <p className="text-xl italic text-amber-100 leading-relaxed font-semibold">
-          "{editorial.oneLiner}"
+    <div className="px-4 py-4 space-y-3">
+      {/* One-liner pull quote */}
+      <blockquote className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] p-5 pl-6">
+        <span className="absolute left-0 top-0 bottom-0 w-1 bg-red-500" />
+        <p className="text-lg font-medium leading-relaxed text-zinc-100">
+          {editorial.oneLiner}
         </p>
-      </div>
+      </blockquote>
 
-      {/* Substantiation Dropdown */}
-      {editorial.oneLinnerSubstantiation &&
-        editorial.oneLinnerSubstantiation.length > 0 && (
+      {points.length > 0 && (
+        <>
           <button
+            type="button"
             onClick={() => setShowSubstantiation(!showSubstantiation)}
-            className="w-full flex items-center gap-2 px-3 py-2 text-amber-300 hover:text-amber-200 font-medium transition rounded-lg hover:bg-slate-800/50 text-sm"
+            aria-expanded={showSubstantiation}
+            className="flex w-full items-center justify-between rounded-xl border border-white/[0.07] bg-white/[0.02] px-4 py-3 text-sm font-semibold text-zinc-300 transition-colors hover:bg-white/[0.05] hover:text-zinc-100 active:scale-[0.99]"
           >
-            <span className="text-lg">{showSubstantiation ? "▼" : "▶"}</span>
             <span>Why this pick</span>
+            <span
+              className={`text-zinc-500 transition-transform duration-200 ${
+                showSubstantiation ? "rotate-180" : ""
+              }`}
+            >
+              ▾
+            </span>
           </button>
-        )}
 
-      {showSubstantiation && editorial.oneLinnerSubstantiation && (
-        <div className="rounded-lg overflow-hidden">
-          {/* Fast Facts - First 3 */}
-          <div className="bg-emerald-950/30 border-l-4 border-emerald-600 p-4 space-y-2 mb-3">
-            <div className="text-xs uppercase tracking-widest text-emerald-400 font-semibold mb-2">
-              The Facts
+          {showSubstantiation && (
+            <div className="space-y-2 rounded-xl border border-white/[0.07] bg-white/[0.02] p-4">
+              {points.map((point, idx) => (
+                <div key={idx} className="flex gap-3 text-sm text-zinc-300">
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-red-500/70" />
+                  <span>{point}</span>
+                </div>
+              ))}
             </div>
-            {editorial.oneLinnerSubstantiation.slice(0, 3).map((point, idx) => (
-              <div key={idx} className="flex gap-3 text-sm text-slate-100">
-                <span className="text-emerald-400 flex-shrink-0 font-bold">✓</span>
-                <span className="font-medium">{point}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* Strategic Context - Last 3 */}
-          <div className="bg-slate-800/60 border-l-4 border-amber-600 p-4 space-y-2">
-            <div className="text-xs uppercase tracking-widest text-amber-300 font-semibold mb-2">
-              The Context
-            </div>
-            {editorial.oneLinnerSubstantiation.slice(3, 6).map((point, idx) => (
-              <div key={idx} className="flex gap-3 text-sm text-slate-200">
-                <span className="text-amber-400 flex-shrink-0">→</span>
-                <span>{point}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+          )}
+        </>
       )}
     </div>
   );

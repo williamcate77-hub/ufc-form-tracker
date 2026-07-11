@@ -1,6 +1,6 @@
 "use client";
 
-import { Fight, BoutType, NotableFlag } from "@/lib/types";
+import { Fight, BoutType } from "@/lib/types";
 
 interface FightHeaderProps {
   fight: Fight;
@@ -8,25 +8,20 @@ interface FightHeaderProps {
   boutTypeLabel: string;
 }
 
-function getBoutTypeColor(type: BoutType): string {
+function getBoutTypePill(type: BoutType): string {
   switch (type) {
     case "main event":
-      return "bg-rose-600";
+      return "bg-red-500/15 text-red-300 border-red-500/25";
     case "co-main":
-      return "bg-orange-600";
+      return "bg-orange-500/15 text-orange-300 border-orange-500/25";
     case "main card":
-      return "bg-amber-600";
-    case "featured prelim":
-      return "bg-slate-700";
-    case "prelim":
-      return "bg-slate-800";
+      return "bg-zinc-500/15 text-zinc-300 border-zinc-500/25";
     default:
-      return "bg-slate-700";
+      return "bg-zinc-700/30 text-zinc-400 border-zinc-600/25";
   }
 }
 
 function getFlagEmoji(country: string): string {
-  // Simple country code to flag emoji converter
   const countryMap: Record<string, string> = {
     USA: "🇺🇸",
     Ireland: "🇮🇪",
@@ -46,60 +41,83 @@ function getFlagEmoji(country: string): string {
     Poland: "🇵🇱",
     Denmark: "🇩🇰",
     Thailand: "🇹🇭",
+    Spain: "🇪🇸",
+    Georgia: "🇬🇪",
     "South Africa": "🇿🇦",
     "New Zealand": "🇳🇿",
   };
   return countryMap[country] || "🌍";
 }
 
-export function FightHeader({
-  fight,
-  totalFights,
-  boutTypeLabel,
-}: FightHeaderProps) {
+export function FightHeader({ fight, boutTypeLabel }: FightHeaderProps) {
+  const [f1, f2] = fight.fighters;
+
   return (
-    <div className="px-4 py-4 border-b border-slate-700 space-y-4">
+    <div className="px-4 pt-5 pb-2 space-y-6">
+      {/* Meta row */}
       <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
-          <span className={`${getBoutTypeColor(fight.boutType)} px-3 py-1 rounded text-xs font-bold text-white uppercase`}>
+        <div className="flex items-center gap-2.5">
+          <span
+            className={`rounded-full border px-3 py-1 text-[10px] font-bold uppercase tracking-widest ${getBoutTypePill(fight.boutType)}`}
+          >
             {boutTypeLabel}
           </span>
-          <span className="text-sm text-slate-400">
-            {fight.rounds} rounds
+          <span className="text-xs text-zinc-500">
+            {fight.division} · {fight.rounds} rounds
           </span>
         </div>
 
         {fight.notableFlag && (
-          <span className="bg-amber-900/50 border border-amber-700 px-2 py-1 rounded text-xs text-amber-200 font-medium">
+          <span className="rounded-full border border-amber-500/25 bg-amber-500/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-amber-300">
             {fight.notableFlag}
           </span>
         )}
       </div>
 
-      <div className="text-center">
-        <div className="text-xs text-slate-400 mb-3">
-          {fight.division} · Fight {fight.boutIndex + 1} of {totalFights}
+      {/* Matchup */}
+      <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-3">
+        {/* Red corner */}
+        <div className="border-t-2 border-red-500 pt-3">
+          <div className="text-2xl leading-none mb-2">
+            {getFlagEmoji(f1.country)}
+          </div>
+          <div className="text-lg font-bold leading-tight tracking-tight text-zinc-50">
+            {f1.name}
+          </div>
+          {f1.nickname && (
+            <div className="mt-0.5 text-xs text-zinc-500">
+              &ldquo;{f1.nickname}&rdquo;
+            </div>
+          )}
+          {f1.rank != null && (
+            <div className="mt-1 font-mono text-xs font-semibold text-red-400">
+              #{f1.rank}
+            </div>
+          )}
         </div>
 
-        <div className="space-y-2">
-          {fight.fighters.map((fighter, idx) => (
-            <div key={idx} className="flex items-center justify-center gap-2">
-              <span className="text-2xl">{getFlagEmoji(fighter.country)}</span>
-              <div className="text-center">
-                <div className="font-bold text-lg text-slate-50">
-                  {fighter.name}
-                </div>
-                {fighter.nickname && (
-                  <div className="text-xs text-slate-400">
-                    "{fighter.nickname}"
-                  </div>
-                )}
-                {fighter.rank && (
-                  <div className="text-xs text-amber-400">#{fighter.rank}</div>
-                )}
-              </div>
+        <div className="self-center px-1 text-sm font-black uppercase italic tracking-widest text-zinc-700">
+          vs
+        </div>
+
+        {/* Blue corner */}
+        <div className="border-t-2 border-blue-500 pt-3 text-right">
+          <div className="text-2xl leading-none mb-2">
+            {getFlagEmoji(f2.country)}
+          </div>
+          <div className="text-lg font-bold leading-tight tracking-tight text-zinc-50">
+            {f2.name}
+          </div>
+          {f2.nickname && (
+            <div className="mt-0.5 text-xs text-zinc-500">
+              &ldquo;{f2.nickname}&rdquo;
             </div>
-          ))}
+          )}
+          {f2.rank != null && (
+            <div className="mt-1 font-mono text-xs font-semibold text-blue-400">
+              #{f2.rank}
+            </div>
+          )}
         </div>
       </div>
     </div>

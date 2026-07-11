@@ -17,8 +17,16 @@ export default function CardWrap() {
             onRefresh={refresh}
           />
         )}
-        <div className="flex flex-1 items-center justify-center">
-          <div className="text-slate-400">No card loaded.</div>
+        <div className="flex flex-1 items-center justify-center px-4">
+          <div className="text-center">
+            <p className="mb-4 text-zinc-400">No card loaded.</p>
+            <Link
+              href="/"
+              className="rounded-full border border-white/10 bg-white/[0.05] px-5 py-2 text-sm font-semibold text-zinc-200 transition-colors hover:bg-white/10"
+            >
+              Back to the card
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -34,53 +42,65 @@ export default function CardWrap() {
         />
       )}
 
-      <div className="flex flex-col flex-1 px-4 py-6 max-w-2xl mx-auto w-full">
-        <Link href="/" className="text-slate-400 hover:text-slate-200 text-sm mb-6">
-          ← Back
+      <div className="mx-auto flex w-full max-w-2xl flex-col flex-1 px-4 pb-6 pt-[calc(1.5rem+env(safe-area-inset-top))]">
+        <Link
+          href="/"
+          className="mb-6 text-sm text-zinc-400 transition-colors hover:text-zinc-100"
+        >
+          ← Card
         </Link>
 
-        <h1 className="text-2xl font-bold text-slate-50 mb-4">
+        <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.35em] text-red-400">
+          Card Wrap
+        </div>
+        <h1 className="mb-5 text-3xl font-black uppercase tracking-tight text-zinc-50">
           {event.eventName}
         </h1>
 
-        <div className="bg-slate-900 border border-slate-700 rounded-lg p-4 mb-6">
-          <p className="text-sm text-slate-300 leading-relaxed italic">
+        <div className="mb-8 rounded-2xl border border-white/[0.07] bg-white/[0.03] p-5">
+          <p className="text-sm leading-relaxed text-zinc-300">
             {event.cardSummary}
           </p>
         </div>
 
-        <h2 className="text-lg font-bold text-slate-50 mb-4">All Picks</h2>
+        <div className="mb-3 text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-500">
+          All Picks
+        </div>
 
-        <div className="space-y-3 mb-8">
+        <div className="mb-10 space-y-3">
           {event.fights.map((fight, idx) => (
-            <div
+            <Link
               key={idx}
-              className="bg-slate-900 border border-slate-700 rounded-lg p-3"
+              href={`/fight/${idx}`}
+              className="group block rounded-2xl border border-white/[0.07] bg-white/[0.03] p-4 transition-all duration-200 hover:border-white/20 hover:bg-white/[0.05]"
             >
-              <div className="text-sm font-bold text-slate-50 mb-1">
-                {fight.fighters[0].name} vs {fight.fighters[1].name}
+              <div className="mb-1 flex items-baseline justify-between gap-3">
+                <span className="text-sm font-bold text-zinc-50">
+                  {fight.fighters[0].name}{" "}
+                  <span className="font-normal text-zinc-600">vs</span>{" "}
+                  {fight.fighters[1].name}
+                </span>
+                <span className="shrink-0 text-xs text-zinc-500">
+                  {fight.division}
+                </span>
               </div>
-              <div className="text-xs text-slate-400 mb-2">
-                {fight.division}
-              </div>
-              <div className="text-sm text-amber-300">
+              <p className="text-sm leading-relaxed text-zinc-400">
+                <span className="font-semibold text-red-400">Pick · </span>
                 {fight.editorial.thePick}
-              </div>
-            </div>
+              </p>
+            </Link>
           ))}
         </div>
 
         {event.nextEvent && (
-          <div className="border-t border-slate-700 pt-6">
-            <h3 className="text-sm text-slate-400 uppercase mb-2">
+          <div className="mt-auto border-t border-white/[0.06] pt-6">
+            <div className="mb-1 text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-500">
               Next Event
-            </h3>
-            <div className="text-lg font-bold text-slate-50">
+            </div>
+            <div className="text-lg font-bold text-zinc-50">
               {event.nextEvent.name}
             </div>
-            <div className="text-sm text-slate-400">
-              {event.nextEvent.date}
-            </div>
+            <div className="text-sm text-zinc-500">{event.nextEvent.date}</div>
           </div>
         )}
       </div>

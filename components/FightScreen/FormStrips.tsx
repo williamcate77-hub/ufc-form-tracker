@@ -1,85 +1,84 @@
 "use client";
 
 import { Fighter } from "@/lib/types";
+import { FormStrip } from "@/components/FormStrip";
+import { useEffect, useState } from "react";
 
 interface FormStripsProps {
   fighters: [Fighter, Fighter];
   currentWeightClass?: string;
 }
 
-function getResultColor(result: string): string {
-  switch (result) {
-    case "W":
-      return "bg-emerald-500";
-    case "L":
-      return "bg-rose-500";
-    case "D":
-    case "NC":
-      return "bg-slate-500";
-    default:
-      return "bg-slate-500";
+const CORNER_DOT = ["bg-red-500", "bg-blue-500"];
+const HINT_DISMISSED_KEY = "ufc_tile_hint_dismissed";
+
+export function FormStrips({ fighters }: FormStripsProps) {
+  // Starts hidden to avoid a hydration mismatch, then shows unless dismissed before
+  const [showHint, setShowHint] = useState(false);
+
+  useEffect(() => {
+    try {
+      if (!localStorage.getItem(HINT_DISMISSED_KEY)) setShowHint(true);
+    } catch {
+      // localStorage unavailable
+    }
+  }, []);
+
+  function dismissHint() {
+    setShowHint(false);
+    try {
+      localStorage.setItem(HINT_DISMISSED_KEY, "1");
+    } catch {
+      // localStorage unavailable
+    }
   }
-}
 
-export function FormStrips({ fighters, currentWeightClass }: FormStripsProps) {
   return (
-    <div className="px-4 py-4 space-y-3">
-      {fighters.map((fighter, idx) => (
-        <div key={idx} className="flex items-start gap-4">
-          {/* Fighter info */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-baseline gap-2 mb-1">
-              <h3 className="font-bold text-slate-50">
-                {fighter.name}
-                {fighter.rank && (
-                  <span className="ml-1 text-sm text-amber-400">#{fighter.rank}</span>
-                )}
-              </h3>
-              <span className="text-xs text-slate-400">{fighter.age}yo</span>
-            </div>
+    <div className="px-4 py-6">
+      <div className="mb-3 flex items-baseline justify-between">
+        <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-500">
+          Recent Form
+        </span>
+        {showHint && (
+          <span className="text-[10px] text-zinc-600">
+            tap a result for details
+          </span>
+        )}
+      </div>
 
-            {/* Weight class: current (previous) */}
-            {currentWeightClass && (
-              <div className="text-xs text-slate-300 mb-2">
-                <span className="font-semibold">{currentWeightClass}</span>
-                {fighter.recentFights.length > 0 && fighter.recentFights[0].weightClass && (
-                  <span className="text-slate-500">
-                    {" "}(prev: {fighter.recentFights[0].weightClass})
+      <div className="space-y-3">
+        {fighters.map((fighter, idx) => (
+          <div
+            key={idx}
+            className="rounded-2xl border border-white/[0.07] bg-white/[0.03] p-4"
+          >
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2 min-w-0">
+                <span
+                  className={`h-2 w-2 shrink-0 rounded-full ${CORNER_DOT[idx]}`}
+                />
+                <span className="truncate text-sm font-bold text-zinc-100">
+                  {fighter.name}
+                </span>
+                {fighter.rank != null && (
+                  <span className="font-mono text-xs text-zinc-500">
+                    #{fighter.rank}
                   </span>
                 )}
               </div>
-            )}
-
-            {/* Compact record line */}
-            <div className="text-xs text-slate-400 mb-2 flex gap-3">
-              <span>
-                <span className="text-slate-300 font-semibold">{fighter.record}</span>
-                <span className="text-slate-500"> Pro</span>
-              </span>
-              <span>
-                <span className="text-slate-300 font-semibold">{fighter.uFCRecord}</span>
-                <span className="text-slate-500"> UFC</span>
+              <span className="shrink-0 font-mono text-xs text-zinc-500">
+                {fighter.record}
               </span>
             </div>
 
-            {/* Last 5 fights as tiles */}
-            <div className="flex gap-1">
-              {fighter.recentFights.slice(0, 5).map((fight, fidx) => (
-                <div
-                  key={fidx}
-                  title={`${fight.result} vs ${fight.opponent} (${fight.method}, ${fight.year})`}
-                  className={`w-8 h-8 ${getResultColor(fight.result)} rounded flex items-center justify-center text-white text-xs font-bold cursor-help hover:ring-2 ring-amber-400 transition`}
-                >
-                  {fight.result}
-                </div>
-              ))}
-              <span className="text-xs text-slate-500 self-center ml-1">
-                {fighter.recentFights.length}
-              </span>
-            </div>
+            <FormStrip
+              fights={fighter.recentFights}
+              interactive
+              onInteract={dismissHint}
+            />
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }

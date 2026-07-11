@@ -2,6 +2,7 @@ export interface RecentFight {
   opponent: string;
   result: "W" | "L" | "D" | "NC";
   method: string;
+  round?: number;
   year: number;
   weightClass?: string;
 }
@@ -14,6 +15,9 @@ export interface Fighter {
   uFCRecord: string;
   rank?: number;
   age: number;
+  heightCm?: number;
+  reachCm?: number;
+  stance?: "Orthodox" | "Southpaw" | "Switch";
   recentFights: RecentFight[];
 }
 
