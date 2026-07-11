@@ -54,7 +54,7 @@ export default function Home() {
     );
   }
 
-  if (!event && !cacheStatus?.eventId) {
+  if (!event) {
     return (
       <div className="flex flex-col flex-1">
         {cacheStatus && (
@@ -88,8 +88,6 @@ export default function Home() {
       </div>
     );
   }
-
-  if (!event) return null;
 
   const prelimFights = event.fights.filter(
     (f) => f.boutType === "prelim" || f.boutType === "featured prelim"

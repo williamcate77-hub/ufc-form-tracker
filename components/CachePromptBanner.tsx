@@ -38,20 +38,20 @@ export function CachePromptBanner({
   }
 
   return (
-    <div className="sticky top-0 z-40 bg-amber-900/30 border-b border-amber-700/50 px-4 py-3 flex items-center justify-between gap-3 text-sm">
-      <p className="text-amber-100">{message}</p>
+    <div className="sticky top-0 z-40 backdrop-blur-md bg-blue-950/40 border-b border-blue-800/50 px-4 py-3 flex items-center justify-between gap-3 text-sm">
+      <p className="text-blue-100">{message}</p>
       <div className="flex items-center gap-2">
         <button
           onClick={() => onRefresh(mode)}
           disabled={isRefreshing}
-          className="px-3 py-1 bg-amber-700 hover:bg-amber-600 disabled:opacity-50 rounded text-amber-50 text-sm font-medium transition"
+          className="px-4 py-1.5 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 disabled:opacity-50 rounded-lg text-white text-sm font-semibold transition-all duration-200 shadow-md"
         >
           {isRefreshing ? "Refreshing..." : actionLabel}
         </button>
         <button
           onClick={() => setDismissed(true)}
           disabled={isRefreshing}
-          className="px-2 py-1 text-amber-200 hover:text-amber-100 disabled:opacity-50 transition"
+          className="px-2 py-1 text-blue-200 hover:text-blue-100 disabled:opacity-50 transition"
         >
           ✕
         </button>
