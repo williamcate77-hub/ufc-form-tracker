@@ -1150,7 +1150,7 @@ export const mockFightCard: CachedEvent = {
     },
     {
       boutIndex: 10,
-      boutType: "early prelim",
+      boutType: "prelim",
       rounds: 3,
       division: "Middleweight",
       notableFlag: undefined,
@@ -1265,7 +1265,7 @@ export const mockFightCard: CachedEvent = {
     },
     {
       boutIndex: 11,
-      boutType: "early prelim",
+      boutType: "prelim",
       rounds: 3,
       division: "Bantamweight",
       notableFlag: undefined,
@@ -1380,7 +1380,7 @@ export const mockFightCard: CachedEvent = {
     },
     {
       boutIndex: 12,
-      boutType: "early prelim",
+      boutType: "prelim",
       rounds: 3,
       division: "Middleweight",
       notableFlag: undefined,
@@ -1495,10 +1495,10 @@ export const mockFightCard: CachedEvent = {
     },
     {
       boutIndex: 13,
-      boutType: "early prelim",
+      boutType: "prelim",
       rounds: 3,
       division: "Flyweight",
-      notableFlag: "card opener",
+      notableFlag: undefined,
       fighters: [
         {
           name: "Alessandro Costa",
